@@ -22,14 +22,14 @@ const createMediaTable = () => {
     ],
     false,
     (error, result) => {
-      console.log("createMediaTable error", error);
-      console.log("createMediaTable result", result);
+      // console.log("createMediaTable error", error);
+      // console.log("createMediaTable result", result);
     }
   );
 };
 
 const createMD5Index = () => {
-  console.log("create media table");
+  console.log("create md5 index");
   db.exec(
     [
       {
@@ -39,14 +39,14 @@ const createMD5Index = () => {
     ],
     false,
     (error, result) => {
-      console.log("createMD5Index error", error);
-      console.log("createMD5Index result", result);
+      // console.log("createMD5Index error", error);
+      // console.log("createMD5Index result", result);
     }
   );
 };
 
 const createCreationTimeIndex = () => {
-  console.log("create media table");
+  console.log("create creationtime index");
   db.exec(
     [
       {
@@ -56,8 +56,8 @@ const createCreationTimeIndex = () => {
     ],
     false,
     (error, result) => {
-      console.log("createMD5Index error", error);
-      console.log("createMD5Index result", result);
+      // console.log("createMD5Index error", error);
+      // console.log("createMD5Index result", result);
     }
   );
 };
@@ -142,8 +142,8 @@ const updateCloudID = async (md5, cloud_id) => {
     ],
     false,
     (error, result) => {
-      console.log("updateCloudID error", error);
-      console.log("updateCloudID result", result);
+      // console.log("updateCloudID error", error);
+      // console.log("updateCloudID result", result);
     }
   );
 };
@@ -153,7 +153,7 @@ const truncateMediaTable = async () => {
   db.exec(
     [
       {
-        sql: `DELETE FROM media;`,
+        sql: `DELETE FROM media WHERE local_id is null;`,
         args: [],
       },
     ],

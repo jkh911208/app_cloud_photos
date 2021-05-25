@@ -31,7 +31,7 @@ const getCloudData = async () => {
     const data = result.data.result;
     const hasNext = result.data.has_next;
 
-    console.log(data);
+    // console.log(data);
 
     for (let i = 0; i < data.length; i++) {
       await insertMedia(
