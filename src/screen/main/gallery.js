@@ -15,7 +15,7 @@ const Gallery = ({ navigation }) => {
   const [image, setImage] = useState([]);
   const [token, setToken] = useState(null);
   SecureStore.getItemAsync("token").then((result) => {
-    console.log("token", result);
+    // console.log("token", result);
     return setToken(result);
   });
 
@@ -33,15 +33,13 @@ const Gallery = ({ navigation }) => {
 
     uploadPhotoToCloud();
     let id = setInterval(() => {
-      console.log("start interval")
+      // console.log("start interval");
       getCloudData();
-      console.log("loaded all cloud data")
+      // console.log("loaded all cloud data");
       getMedia(setImage);
-      console.log("image state updated")
+      // console.log("image state updated");
     }, 10000);
     return () => clearInterval(id);
-
-    
   }, []);
 
   const renderItem = ({ item }) => {
@@ -58,7 +56,7 @@ const Gallery = ({ navigation }) => {
         onPress={() =>
           navigation.navigate("SingleView", {
             item: item,
-            imageList: image,
+            // imageList: image,
             token: token,
           })
         }

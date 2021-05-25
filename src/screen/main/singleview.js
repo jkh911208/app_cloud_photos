@@ -9,8 +9,7 @@ const imageDisplayWidth = Dimensions.get("window").width;
 
 const SingleView = ({ navigation }) => {
   const { item, token } = navigation.state.params;
-
-  console.log(item)
+  // console.log(item)
 
   // useEffect(() => {
   //   const runAsyncUseEffect = async () => {
