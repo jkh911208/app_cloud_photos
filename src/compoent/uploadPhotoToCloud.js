@@ -4,7 +4,7 @@ import { updateCloudID, db } from "../database";
 import * as FileSystem from "expo-file-system";
 import { FileSystemUploadType } from "expo-file-system";
 import * as Network from "expo-network";
-import {API_URL} from "@env";
+import { API_URL } from "@env";
 
 const uploadPhotoToCloud = async () => {
   const networkType = await Network.getNetworkStateAsync();
