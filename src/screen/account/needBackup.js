@@ -26,7 +26,7 @@ function NeedBackup() {
 
   return (
     <SafeAreaView>
-      <Text>Need backup, Only JPEG and JPG supported</Text>
+      <Text>Need backup, Only HEIC and JPEG/JPG supported</Text>
       <FlatList
         horizontal={false}
         numColumns={4}
