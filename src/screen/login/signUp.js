@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
-import { View, StyleSheet } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Text, Input, Button } from "react-native-elements";
+import { Button, Input, Text } from "react-native-elements";
+import React, { useContext, useState } from "react";
+
 import { Context as AuthContext } from "../../context/AuthContext";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { StyleSheet } from "react-native";
 
 const SignUp = ({ navigation }) => {
   const { state, signup } = useContext(AuthContext);

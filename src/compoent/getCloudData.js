@@ -1,8 +1,9 @@
 import * as SecureStore from "expo-secure-store";
+
+import { API_URL } from "@env";
+import { Platform } from "react-native";
 import api from "../api/api";
 import { insertMedia } from "../database";
-import { Platform } from "react-native";
-import { API_URL } from "@env";
 
 const getCloudData = async () => {
   const token = await SecureStore.getItemAsync("token");

@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { Dimensions, FlatList, AppState } from "react-native";
-import { SafeAreaView } from "react-navigation";
+import * as MediaLibrary from "expo-media-library";
+import * as SecureStore from "expo-secure-store";
+
+import { AppState, Dimensions, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+
 import { Image } from "react-native-elements";
+import { SafeAreaView } from "react-navigation";
+import getCloudData from "../../compoent/getCloudData";
 import { getMedia } from "../../database";
 import updateLocalPhotoLibrary from "../../compoent/updateLocalPhotoLibrary";
-import * as MediaLibrary from "expo-media-library";
 import uploadPhotoToCloud from "../../compoent/uploadPhotoToCloud";
-import getCloudData from "../../compoent/getCloudData";
-import * as SecureStore from "expo-secure-store";
-const thumbnailWidth = Dimensions.get("window").width / 4;
 
 const Gallery = ({ navigation }) => {
+  const thumbnailWidth = Dimensions.get("window").width / 4;
   const [image, setImage] = useState([]);
   const [token, setToken] = useState(null);
 

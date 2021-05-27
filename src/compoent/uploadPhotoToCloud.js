@@ -1,10 +1,12 @@
-import * as SecureStore from "expo-secure-store";
-import * as MediaLibrary from "expo-media-library";
-import { updateCloudID, db } from "../database";
 import * as FileSystem from "expo-file-system";
-import { FileSystemUploadType } from "expo-file-system";
+import * as MediaLibrary from "expo-media-library";
 import * as Network from "expo-network";
+import * as SecureStore from "expo-secure-store";
+
+import { db, updateCloudID } from "../database";
+
 import { API_URL } from "@env";
+import { FileSystemUploadType } from "expo-file-system";
 
 const uploadPhotoToCloud = async () => {
   const networkType = await Network.getNetworkStateAsync();

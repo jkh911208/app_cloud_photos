@@ -1,20 +1,18 @@
-import React from "react";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import { createBottomTabNavigator } from "react-navigation-tabs";
 
+import Account from "./src/screen/main/account";
+import { Provider as AuthProvider } from "./src/context/AuthContext";
+import BackupFinished from "./src/screen/account/backupFinished";
+import Gallery from "./src/screen/main/gallery";
+import LoadedFromCloud from "./src/screen/account/loadedFromCloud";
+import Loading from "./src/screen/login/loading";
+import NeedBackup from "./src/screen/account/needBackup";
+import React from "react";
 import SignIn from "./src/screen/login/signIn";
 import SignUp from "./src/screen/login/signUp";
-import Account from "./src/screen/main/account";
-import Gallery from "./src/screen/main/gallery";
-import Loading from "./src/screen/login/loading";
 import SingleView from "./src/screen/main/singleview";
-import BackupFinished from "./src/screen/account/backupFinished";
-import LoadedFromCloud from "./src/screen/account/loadedFromCloud";
-import NeedBackup from "./src/screen/account/needBackup";
-
-import { Provider as AuthProvider } from "./src/context/AuthContext";
-
+import { createBottomTabNavigator } from "react-navigation-tabs";
+import { createStackNavigator } from "react-navigation-stack";
 import { setNavigator } from "./src/navigationRef";
 
 const switchNavigator = createSwitchNavigator({

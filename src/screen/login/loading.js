@@ -1,6 +1,7 @@
-import { useEffect, useContext } from "react";
+import { createCreationTimeIndex, createMD5Index, createMediaTable } from "../../database";
+import { useContext, useEffect } from "react";
+
 import { Context as AuthContext } from "../../context/AuthContext";
-import { createMediaTable, createMD5Index, createCreationTimeIndex } from "../../database";
 import updateLocalPhotoLibrary from "../../compoent/updateLocalPhotoLibrary";
 
 const Loading = () => {

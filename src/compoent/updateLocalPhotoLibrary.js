@@ -1,6 +1,7 @@
-import * as MediaLibrary from "expo-media-library";
-import { insertMedia } from "../database";
 import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from "expo-media-library";
+
+import { insertMedia } from "../database";
 
 const updateLocalPhotoLibrary = async () => {
   console.log("updateLocalPhotoLibrary");

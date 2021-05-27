@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
-import { View, StyleSheet } from "react-native";
-import { Text, Input, Button } from "react-native-elements";
+import { Button, Input, Text } from "react-native-elements";
+import React, { useContext, useState } from "react";
+
 import { Context as AuthContext } from "../../context/AuthContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { StyleSheet } from "react-native";
 
 const SignIn = ({ navigation }) => {
   const { state, signin } = useContext(AuthContext);
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   signUpText: {
-    marginTop:25,
+    marginTop: 25,
     color: "#939597",
     alignItems: "center",
     justifyContent: "center",

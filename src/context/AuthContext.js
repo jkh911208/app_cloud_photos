@@ -1,11 +1,12 @@
-import createDataContext from "./createDataContext";
-import api from "../api/api";
+import * as Crypto from "expo-crypto";
 import * as SecureStore from "expo-secure-store";
+
+import Constants from "expo-constants";
+import { CryptoEncoding } from "expo-crypto";
+import api from "../api/api";
+import createDataContext from "./createDataContext";
 import { navigate } from "../navigationRef";
 import { truncateMediaTable } from "../database";
-import Constants from "expo-constants";
-import * as Crypto from "expo-crypto";
-import { CryptoEncoding } from "expo-crypto";
 
 const authReducer = (state, action) => {
   switch (action.type) {

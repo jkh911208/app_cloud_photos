@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { FlatList, Dimensions } from "react-native";
-import { SafeAreaView } from "react-navigation";
+import { Dimensions, FlatList } from "react-native";
 import { Image, Text } from "react-native-elements";
+import React, { useEffect, useState } from "react";
+
+import { SafeAreaView } from "react-navigation";
 import { getLoadedFromCloud } from "../../database";
 
 const thumbnailWidth = Dimensions.get("window").width / 4;

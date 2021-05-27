@@ -1,8 +1,9 @@
+import { Dimensions, Platform, StyleSheet } from "react-native";
 import React, { useEffect } from "react";
-import { Dimensions, StyleSheet, Platform } from "react-native";
-import { SafeAreaView } from "react-navigation";
-import { Image } from "react-native-elements";
+
 import GestureRecognizer from "react-native-swipe-gestures";
+import { Image } from "react-native-elements";
+import { SafeAreaView } from "react-navigation";
 const imageDisplayWidth = Dimensions.get("window").width;
 // import * as MediaLibrary from "expo-media-library";
 // import * as FileSystem from "expo-file-system";

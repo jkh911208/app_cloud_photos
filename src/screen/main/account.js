@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
-import { StyleSheet } from "react-native";
-import { SafeAreaView } from "react-navigation";
-import { Button } from "react-native-elements";
-import { Context as AuthContext } from "../../context/AuthContext";
 import * as SecureStore from "expo-secure-store";
+
+import React, { useContext } from "react";
+
+import { Context as AuthContext } from "../../context/AuthContext";
+import { Button } from "react-native-elements";
+import { SafeAreaView } from "react-navigation";
+import { StyleSheet } from "react-native";
 
 const Account = ({ navigation }) => {
   const { signout } = useContext(AuthContext);
