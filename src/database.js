@@ -2,30 +2,29 @@ import * as SQLite from "expo-sqlite";
 
 const db = SQLite.openDatabase("cloudphotos.db", "2");
 
-const createMediaTable = () => {
+const createMediaTable = async () => {
   console.log("create media table");
-  db.exec(
-    [
-      {
-        sql: `create table if not exists media (
-                local_id text UNIQUE,
-                cloud_id text UNIQUE,
-                width integer not null,
-                height integer not null,
-                uri text not null,
-                thumbnail_uri text not null,
-                creationTime datetime not null,
-                md5 text primary key not null UNIQUE
-            );`,
-        args: [],
-      },
-    ],
-    false,
-    (error, result) => {
-      // console.log("createMediaTable error", error);
-      // console.log("createMediaTable result", result);
-    }
-  );
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `create table if not exists media (
+          local_id text UNIQUE,
+          cloud_id text UNIQUE,
+          width integer not null,
+          height integer not null,
+          uri text not null,
+          thumbnail_uri text not null,
+          creationTime datetime not null,
+          md5 text primary key not null UNIQUE
+      );`,
+        [],
+        (tx, result) => {
+          // console.log(result)
+          resolve(null);
+        }
+      );
+    });
+  });
 };
 
 const createMD5Index = () => {
@@ -116,7 +115,7 @@ const insertMedia = (
   );
 };
 
-const getMedia = (setFunction) => {
+const getMedia = async (setFunction) => {
   console.log("get entire data");
   db.transaction((tx) => {
     tx.executeSql(
@@ -142,8 +141,8 @@ const updateCloudID = async (md5, cloud_id) => {
     ],
     false,
     (error, result) => {
-      // console.log("updateCloudID error", error);
-      // console.log("updateCloudID result", result);
+      console.log("updateCloudID error", error);
+      console.log("updateCloudID result", result);
     }
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dimensions, FlatList } from "react-native";
+import { Dimensions, FlatList, AppState } from "react-native";
 import { SafeAreaView } from "react-navigation";
 import { Image } from "react-native-elements";
 import { getMedia } from "../../database";
@@ -8,39 +8,49 @@ import * as MediaLibrary from "expo-media-library";
 import uploadPhotoToCloud from "../../compoent/uploadPhotoToCloud";
 import getCloudData from "../../compoent/getCloudData";
 import * as SecureStore from "expo-secure-store";
-
 const thumbnailWidth = Dimensions.get("window").width / 4;
 
 const Gallery = ({ navigation }) => {
   const [image, setImage] = useState([]);
   const [token, setToken] = useState(null);
-  SecureStore.getItemAsync("token").then((result) => {
-    // console.log("token", result);
-    return setToken(result);
-  });
 
   useEffect(() => {
-    getMedia(setImage);
-    // listener to change in library
+    SecureStore.getItemAsync("token").then((result) => {
+      setToken(result);
+    });
+    runInitSetup();
+  }, []);
+  const runInitSetup = async () => {
+    await getMedia(setImage);
+    await uploadPhotoToCloud();
+    await getCloudData();
+  };
+
+  useEffect(() => {
+    AppState.addEventListener("change", _handleAppStateChange);
+
     MediaLibrary.addListener((event) => {
-      const runAsync = async () => {
-        await updateLocalPhotoLibrary();
-        await uploadPhotoToCloud();
-        await getMedia(setImage);
-      };
-      runAsync();
+      changeListener();
     });
 
-    uploadPhotoToCloud();
-    let id = setInterval(() => {
-      // console.log("start interval");
-      getCloudData();
-      // console.log("loaded all cloud data");
-      getMedia(setImage);
-      // console.log("image state updated");
-    }, 10000);
-    return () => clearInterval(id);
+    return () => {
+      MediaLibrary.removeAllListeners();
+      AppState.removeEventListener("change", _handleAppStateChange);
+    };
   }, []);
+
+  const _handleAppStateChange = (nextAppState) => {
+    if (nextAppState === "active") {
+      changeListener();
+    }
+  };
+
+  const changeListener = async () => {
+    await updateLocalPhotoLibrary();
+    await getMedia(setImage);
+    await uploadPhotoToCloud();
+    await getCloudData();
+  };
 
   const renderItem = ({ item }) => {
     return (

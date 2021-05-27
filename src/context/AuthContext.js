@@ -156,7 +156,7 @@ const signin =
       // console.log(username, password);
       bodyFormData.append("username", username);
       bodyFormData.append("password", password);
-      console.log("make request");
+      console.log("signin, make request");
       const sessionId = Constants.sessionId;
       const hashString = sessionId + "cloudpho";
       const hashResult = await Crypto.digestStringAsync(
@@ -170,7 +170,7 @@ const signin =
         "X-Custom-Auth": hashResult,
         sessionId,
       }
-      console.log(headers)
+      // console.log(headers)
       const response = await api.post(
         "/api/v1/user/login",
         (data = bodyFormData),

@@ -7,15 +7,16 @@ const Loading = () => {
   const { getLocalToken } = useContext(AuthContext);
 
   useEffect(() => {
-    const runAsyncUseEffect = async () => {
-      await updateLocalPhotoLibrary();
-    };
     getLocalToken();
-    createMediaTable();
-    createMD5Index();
-    createCreationTimeIndex();
     runAsyncUseEffect();
   }, []);
+
+  const runAsyncUseEffect = async () => {
+    await createMediaTable();
+    await createMD5Index();
+    await createCreationTimeIndex();
+    await updateLocalPhotoLibrary();
+  };
 
   return null;
 };
