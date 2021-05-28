@@ -33,7 +33,7 @@ const getLocalToken = (dispatch) => async () => {
     dispatch({ type: "token", payload: token });
     navigate("Gallery");
   } else {
-    navigate("loginFlow");
+    navigate("privacyNotice");
   }
 };
 

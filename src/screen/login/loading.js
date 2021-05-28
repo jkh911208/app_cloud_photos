@@ -2,7 +2,6 @@ import { createCreationTimeIndex, createMD5Index, createMediaTable } from "../..
 import { useContext, useEffect } from "react";
 
 import { Context as AuthContext } from "../../context/AuthContext";
-import updateLocalPhotoLibrary from "../../compoent/updateLocalPhotoLibrary";
 
 const Loading = () => {
   const { getLocalToken } = useContext(AuthContext);
@@ -16,7 +15,6 @@ const Loading = () => {
     await createMediaTable();
     await createMD5Index();
     await createCreationTimeIndex();
-    await updateLocalPhotoLibrary();
   };
 
   return null;

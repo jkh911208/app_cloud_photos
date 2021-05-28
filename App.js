@@ -7,6 +7,7 @@ import Gallery from "./src/screen/main/gallery";
 import LoadedFromCloud from "./src/screen/account/loadedFromCloud";
 import Loading from "./src/screen/login/loading";
 import NeedBackup from "./src/screen/account/needBackup";
+import PrivacyNotice from "./src/screen/login/privacyNotice";
 import React from "react";
 import SignIn from "./src/screen/login/signIn";
 import SignUp from "./src/screen/login/signUp";
@@ -17,6 +18,7 @@ import { setNavigator } from "./src/navigationRef";
 
 const switchNavigator = createSwitchNavigator({
   loading: Loading,
+  privacyNotice: PrivacyNotice,
   loginFlow: createStackNavigator({
     Signup: SignUp,
     Signin: SignIn,
