@@ -10,7 +10,7 @@ import { StyleSheet } from "react-native";
 const Account = ({ navigation }) => {
   const { signout } = useContext(AuthContext);
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#939597" }}> 
       <Text style={styles.text}>Account</Text>
       <Button
         title="Backup Finished"
@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
     margin:10,
     fontSize:30,
     alignContent:"center",
-    textAlign:"center"
+    textAlign:"center",
+    color:"white"
   }
 });
 

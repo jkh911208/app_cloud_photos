@@ -65,7 +65,7 @@ const Gallery = ({ navigation }) => {
             Authorization: `Bearer ${token}`,
           },
         }}
-        style={{ width: thumbnailWidth, height: thumbnailWidth }}
+        style={{ width: thumbnailWidth, height: thumbnailWidth, margin:1 }}
         onPress={() =>
           navigation.navigate("SingleView", {
             item: item,
@@ -85,8 +85,9 @@ const Gallery = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#939597" }}>
       <FlatList
+      style={{marginTop:15}}
         horizontal={false}
         numColumns={4}
         data={image}
