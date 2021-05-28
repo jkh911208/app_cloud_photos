@@ -1,9 +1,9 @@
 import * as SecureStore from "expo-secure-store";
 
+import { Button, Text } from "react-native-elements";
 import React, { useContext } from "react";
 
 import { Context as AuthContext } from "../../context/AuthContext";
-import { Button } from "react-native-elements";
 import { SafeAreaView } from "react-navigation";
 import { StyleSheet } from "react-native";
 
@@ -11,6 +11,7 @@ const Account = ({ navigation }) => {
   const { signout } = useContext(AuthContext);
   return (
     <SafeAreaView>
+      <Text style={styles.text}>Account</Text>
       <Button
         title="Backup Finished"
         onPress={() => navigation.navigate("BackupFinished")}
@@ -41,6 +42,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: "#F5dF4D",
   },
+  text:{
+    margin:10,
+    fontSize:30,
+    alignContent:"center",
+    textAlign:"center"
+  }
 });
 
 export default Account;

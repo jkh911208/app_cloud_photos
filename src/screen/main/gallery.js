@@ -13,6 +13,7 @@ import uploadPhotoToCloud from "../../compoent/uploadPhotoToCloud";
 
 const Gallery = ({ navigation }) => {
   const thumbnailWidth = Dimensions.get("window").width / 4;
+  const [refreshing, setRefreshing] = useState(false);
   const [image, setImage] = useState([]);
   const [token, setToken] = useState(null);
 
@@ -76,6 +77,13 @@ const Gallery = ({ navigation }) => {
     );
   };
 
+  const reload = async () => {
+    setRefreshing(true);
+    console.log("reload");
+    await changeListener();
+    setRefreshing(false);
+  };
+
   return (
     <SafeAreaView>
       <FlatList
@@ -84,6 +92,8 @@ const Gallery = ({ navigation }) => {
         data={image}
         renderItem={renderItem}
         keyExtractor={(item) => item.md5}
+        onRefresh={reload}
+        refreshing={refreshing}
       />
     </SafeAreaView>
   );

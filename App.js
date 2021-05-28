@@ -20,19 +20,59 @@ const switchNavigator = createSwitchNavigator({
   loading: Loading,
   privacyNotice: PrivacyNotice,
   loginFlow: createStackNavigator({
-    Signup: SignUp,
-    Signin: SignIn,
+    Signup: {
+      screen: SignUp,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    Signin: {
+      screen: SignIn,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
   }),
   mainFlow: createBottomTabNavigator({
     Media: createStackNavigator({
-      Gallery: Gallery,
-      SingleView: SingleView,
+      Gallery: {
+        screen: Gallery,
+        navigationOptions: {
+          headerShown: false,
+        },
+      },
+      SingleView: {
+        screen: SingleView,
+        navigationOptions: {
+          headerShown: false,
+        },
+      },
     }),
     Account: createStackNavigator({
-      Account: Account,
-      BackupFinished: BackupFinished,
-      LoadedFromCloud: LoadedFromCloud,
-      NeedBackup: NeedBackup,
+      Account: {
+        screen: Account,
+        navigationOptions: {
+          headerShown: false,
+        },
+      },
+      BackupFinished: {
+        screen: BackupFinished,
+        navigationOptions: {
+          headerShown: false,
+        },
+      },
+      LoadedFromCloud: {
+        screen: LoadedFromCloud,
+        navigationOptions: {
+          headerShown: false,
+        },
+      },
+      NeedBackup: {
+        screen: NeedBackup,
+        navigationOptions: {
+          headerShown: false,
+        },
+      },
     }),
   }),
 });
