@@ -91,6 +91,12 @@ const mainFlowBottomTabNavigator = createBottomTabNavigator({
       },
     },
   },
+}, {
+  tabBarOptions:{
+    style:{
+      backgroundColor: "white"
+    }
+  }
 });
 
 const switchNavigator = createSwitchNavigator({
