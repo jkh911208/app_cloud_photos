@@ -2,6 +2,18 @@ import * as SQLite from "expo-sqlite";
 
 const db = SQLite.openDatabase("cloudphotos.db", "2");
 
+const query = async (sql, data) => {
+  console.log("make sql query");
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(sql, data, (tx, result) => {
+        // console.log(result)
+        resolve(result);
+      });
+    });
+  });
+};
+
 const createMediaTable = async () => {
   console.log("create media table");
   return new Promise((resolve, reject) => {
