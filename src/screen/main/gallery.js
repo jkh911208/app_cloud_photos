@@ -5,6 +5,7 @@ import { AppState, Dimensions, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { Image } from "react-native-elements";
+import JWT from "expo-jwt";
 import { SafeAreaView } from "react-navigation";
 import getCloudData from "../../compoent/getCloudData";
 import { getMedia } from "../../database";
@@ -63,9 +64,10 @@ const Gallery = ({ navigation }) => {
           cache: "force-cache",
           headers: {
             Authorization: `Bearer ${token}`,
+            "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
           },
         }}
-        style={{ width: thumbnailWidth, height: thumbnailWidth, margin:1 }}
+        style={{ width: thumbnailWidth, height: thumbnailWidth, margin: 1 }}
         onPress={() =>
           navigation.navigate("SingleView", {
             item: item,
@@ -87,7 +89,7 @@ const Gallery = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#939597" }}>
       <FlatList
-      style={{marginTop:15}}
+        style={{ marginTop: 15 }}
         horizontal={false}
         numColumns={4}
         data={image}

@@ -1,8 +1,7 @@
-import * as Crypto from "expo-crypto";
 import * as SecureStore from "expo-secure-store";
 
-import Constants from "expo-constants";
-import { CryptoEncoding } from "expo-crypto";
+import JWT from "expo-jwt";
+import { SECRET } from "@env";
 import api from "../api/api";
 import createDataContext from "./createDataContext";
 import { navigate } from "../navigationRef";
@@ -114,14 +113,6 @@ const signup =
       });
     }
 
-    const sessionId = Constants.sessionId;
-    const hashString = sessionId + "cloudpho";
-    const hashResult = await Crypto.digestStringAsync(
-      Crypto.CryptoDigestAlgorithm.SHA256,
-      hashString,
-      { encoding: CryptoEncoding.HEX }
-    );
-
     // all test passed, make request to server
     try {
       const response = await api.post(
@@ -131,7 +122,9 @@ const signup =
           password,
         },
         {
-          headers: { "X-Custom-Auth": hashResult, sessionId },
+          headers: {
+            "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
+          },
         }
       );
       console.log(response.data);
@@ -158,25 +151,17 @@ const signin =
       bodyFormData.append("username", username);
       bodyFormData.append("password", password);
       console.log("signin, make request");
-      const sessionId = Constants.sessionId;
-      const hashString = sessionId + "cloudpho";
-      const hashResult = await Crypto.digestStringAsync(
-        Crypto.CryptoDigestAlgorithm.SHA256,
-        hashString,
-        { encoding: CryptoEncoding.HEX }
-      );
-      
+
       const headers = {
         "Content-Type": "multipart/form-data",
-        "X-Custom-Auth": hashResult,
-        sessionId,
-      }
+        "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
+      };
       // console.log(headers)
       const response = await api.post(
         "/api/v1/user/login",
         (data = bodyFormData),
         {
-          headers
+          headers,
         }
       );
       // console.log(response.data);

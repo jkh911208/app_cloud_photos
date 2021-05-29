@@ -2,6 +2,8 @@ import { Dimensions, FlatList } from "react-native";
 import { Image, Text } from "react-native-elements";
 import React, { useEffect, useState } from "react";
 
+import JWT from "expo-jwt";
+import { SECRET } from "@env";
 import { SafeAreaView } from "react-navigation";
 import { getLoadedFromCloud } from "../../database";
 
@@ -23,6 +25,7 @@ function LoadedFromCloud({ navigation }) {
           cache: "force-cache",
           headers: {
             Authorization: `Bearer ${token}`,
+            "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
           },
         }}
         style={{ width: thumbnailWidth, height: thumbnailWidth }}

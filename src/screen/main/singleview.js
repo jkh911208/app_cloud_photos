@@ -3,7 +3,9 @@ import React, { useEffect } from "react";
 
 import GestureRecognizer from "react-native-swipe-gestures";
 import { Image } from "react-native-elements";
+import JWT from "expo-jwt";
 import { SafeAreaView } from "react-navigation";
+
 const imageDisplayWidth = Dimensions.get("window").width;
 // import * as MediaLibrary from "expo-media-library";
 // import * as FileSystem from "expo-file-system";
@@ -49,6 +51,7 @@ const SingleView = ({ navigation }) => {
             cache: "force-cache",
             headers: {
               Authorization: `Bearer ${token}`,
+              "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
             },
           }}
           style={{

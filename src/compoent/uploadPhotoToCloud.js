@@ -3,10 +3,11 @@ import * as MediaLibrary from "expo-media-library";
 import * as Network from "expo-network";
 import * as SecureStore from "expo-secure-store";
 
+import { API_URL, SECRET } from "@env";
 import { db, updateCloudID } from "../database";
 
-import { API_URL } from "@env";
 import { FileSystemUploadType } from "expo-file-system";
+import JWT from "expo-jwt";
 
 const uploadPhotoToCloud = async () => {
   const networkType = await Network.getNetworkStateAsync();
@@ -32,6 +33,7 @@ const uploadPhotoToCloud = async () => {
     accept: "application/json",
     "Content-Type": "multipart/form-data",
     Authorization: `Bearer ${token}`,
+    "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
   };
 
   // upload file to cloud

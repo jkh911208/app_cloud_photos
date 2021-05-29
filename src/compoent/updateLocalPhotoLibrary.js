@@ -16,6 +16,7 @@ const updateLocalPhotoLibrary = async () => {
     first: 50,
     sortBy: [["creationTime", false]],
     createdBefore: Date.now(),
+    // mediaType: [MediaLibrary.MediaType.photo, MediaLibrary.MediaType.video],
   };
 
   while (true) {

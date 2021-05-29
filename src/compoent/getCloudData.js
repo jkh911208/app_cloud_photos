@@ -1,6 +1,8 @@
 import * as SecureStore from "expo-secure-store";
 
-import { API_URL } from "@env";
+import { API_URL, SECRET } from "@env";
+
+import JWT from "expo-jwt";
 import { Platform } from "react-native";
 import api from "../api/api";
 import { insertMedia } from "../database";
@@ -16,6 +18,7 @@ const getCloudData = async () => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
+      "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
     },
   };
 
