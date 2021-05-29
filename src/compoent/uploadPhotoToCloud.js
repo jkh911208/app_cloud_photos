@@ -47,6 +47,10 @@ const uploadPhotoToCloud = async () => {
       size: true,
     });
 
+    if (!fsInfo.exists) {
+      continue;
+    }
+
     const options = {
       headers,
       httpMethod: "POST",

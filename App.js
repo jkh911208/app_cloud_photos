@@ -74,30 +74,34 @@ const accountStackNavigator = createStackNavigator({
   },
 });
 
-const mainFlowBottomTabNavigator = createBottomTabNavigator({
-  Media: {
-    screen: mediaStackNavigator,
-    navigationOptions: {
-      tabBarIcon: () => {
-        return <Icon name="image" />;
+const mainFlowBottomTabNavigator = createBottomTabNavigator(
+  {
+    Media: {
+      screen: mediaStackNavigator,
+      navigationOptions: {
+        tabBarIcon: () => {
+          return <Icon name="image" />;
+        },
+      },
+    },
+    Account: {
+      screen: accountStackNavigator,
+      navigationOptions: {
+        tabBarIcon: () => {
+          return <Icon name="settings" />;
+        },
       },
     },
   },
-  Account: {
-    screen: accountStackNavigator,
-    navigationOptions: {
-      tabBarIcon: () => {
-        return <Icon name="settings" />;
+  {
+    tabBarOptions: {
+      style: {
+        backgroundColor: "white",
+        height: 50,
       },
     },
-  },
-}, {
-  tabBarOptions:{
-    style:{
-      backgroundColor: "white"
-    }
   }
-});
+);
 
 const switchNavigator = createSwitchNavigator({
   loading: Loading,

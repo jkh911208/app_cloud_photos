@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 
 import { Image } from "react-native-elements";
 import JWT from "expo-jwt";
+import { SECRET } from "@env";
 import { SafeAreaView } from "react-navigation";
 import getCloudData from "../../compoent/getCloudData";
 import { getMedia } from "../../database";

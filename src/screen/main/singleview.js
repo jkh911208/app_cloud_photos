@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import GestureRecognizer from "react-native-swipe-gestures";
 import { Image } from "react-native-elements";
 import JWT from "expo-jwt";
+import { SECRET } from "@env";
 import { SafeAreaView } from "react-navigation";
 
 const imageDisplayWidth = Dimensions.get("window").width;
