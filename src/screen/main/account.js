@@ -1,54 +1,71 @@
 import * as SecureStore from "expo-secure-store";
 
-import { Button, Text } from "react-native-elements";
+import { Header, ListItem } from "react-native-elements";
 import React, { useContext } from "react";
 
 import { Context as AuthContext } from "../../context/AuthContext";
+import { FlatList } from "react-native";
 import { SafeAreaView } from "react-navigation";
-import { StyleSheet } from "react-native";
 
 const Account = ({ navigation }) => {
   const { signout } = useContext(AuthContext);
+
+  const account_list = [
+    {
+      title: "Backup Finished",
+      onPress: () => {
+        navigation.navigate("BackupFinished");
+      },
+    },
+    {
+      title: "Need Backup",
+      onPress: () => {
+        navigation.navigate("NeedBackup");
+      },
+    },
+    {
+      title: "Loaded From Cloud",
+      onPress: () => {
+        SecureStore.getItemAsync("token").then((result) => {
+          navigation.navigate("LoadedFromCloud", { token: result });
+        });
+      },
+    },
+    {
+      title: "Sign Out",
+      onPress: signout,
+    },
+  ];
+
+  const renderItem = ({ item }) => {
+    return (
+      <ListItem bottomDivider onPress={item.onPress}>
+        <ListItem.Content>
+          <ListItem.Title>{item.title}</ListItem.Title>
+        </ListItem.Content>
+      </ListItem>
+    );
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#939597" }}> 
-      <Text style={styles.text}>Account</Text>
-      <Button
-        title="Backup Finished"
-        onPress={() => navigation.navigate("BackupFinished")}
-        buttonStyle={styles.button}
-      />
-      <Button
-        title="Need Backup"
-        onPress={() => navigation.navigate("NeedBackup")}
-        buttonStyle={styles.button}
-      />
-      <Button
-        title="Loaded From Cloud"
-        onPress={() => {
-          SecureStore.getItemAsync("token").then((result) => {
-            navigation.navigate("LoadedFromCloud", { token: result });
-          });
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#939597" }}>
+      <Header
+        statusBarProps={{ backgroundColor: "#939597" }}
+        centerComponent={{
+          text: "Account",
+          style: { color: "#fff", fontSize: 25 },
         }}
-        buttonStyle={styles.button}
+        containerStyle={{
+          backgroundColor: "#939597",
+        }}
       />
-      <Button title="Sign Out" onPress={signout} buttonStyle={styles.button} />
+      <FlatList
+        data={account_list}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.title}
+      />
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    margin: 5,
-    borderRadius: 15,
-    backgroundColor: "#F5dF4D",
-  },
-  text:{
-    margin:10,
-    fontSize:30,
-    alignContent:"center",
-    textAlign:"center",
-    color:"white"
-  }
-});
 
 export default Account;

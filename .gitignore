@@ -16,3 +16,4 @@ web-build/
 
 .env
 production.env
+dist

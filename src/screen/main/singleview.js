@@ -1,8 +1,8 @@
 import { Dimensions, Platform, StyleSheet } from "react-native";
+import { Header, Image } from "react-native-elements";
 import React, { useEffect } from "react";
 
 import GestureRecognizer from "react-native-swipe-gestures";
-import { Image } from "react-native-elements";
 import JWT from "expo-jwt";
 import { SECRET } from "@env";
 import { SafeAreaView } from "react-navigation";
@@ -38,30 +38,50 @@ const SingleView = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView
-      style={styles.container}
-      forceInset={{ top: "always", bottom: "always" }}
-    >
-      <GestureRecognizer
-        onSwipeDown={() => onSwipeDown()}
-        onSwipeUp={() => onSwipeUp()}
+    <>
+      <Header
+        statusBarProps={{ backgroundColor: "black" }}
+        leftComponent={{
+          icon: "chevron-left",
+          color: "#fff",
+          size: 25,
+          onPress: () => {
+            navigation.goBack();
+          },
+        }}
+        centerComponent={{
+          text: "Cloud Photos",
+          style: { color: "#fff", fontSize: 25 },
+        }}
+        containerStyle={{
+          backgroundColor: "black",
+        }}
+      />
+      <SafeAreaView
+        style={styles.container}
+        forceInset={{ top: "always", bottom: "always" }}
       >
-        <Image
-          source={{
-            uri: item.uri,
-            cache: "force-cache",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
-            },
-          }}
-          style={{
-            width: imageDisplayWidth,
-            height: (item.height * imageDisplayWidth) / item.width,
-          }}
-        />
-      </GestureRecognizer>
-    </SafeAreaView>
+        <GestureRecognizer
+          onSwipeDown={() => onSwipeDown()}
+          onSwipeUp={() => onSwipeUp()}
+        >
+          <Image
+            source={{
+              uri: item.uri,
+              cache: "force-cache",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
+              },
+            }}
+            style={{
+              width: imageDisplayWidth,
+              height: (item.height * imageDisplayWidth) / item.width,
+            }}
+          />
+        </GestureRecognizer>
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -70,6 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "black",
   },
 });
 export default SingleView;

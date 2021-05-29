@@ -32,20 +32,40 @@ const loginFlowStackNavigator = createStackNavigator({
   },
 });
 
-const mediaStackNavigator = createStackNavigator({
-  Gallery: {
-    screen: Gallery,
-    navigationOptions: {
-      headerShown: false,
+const mediaStackNavigator = createStackNavigator(
+  {
+    Gallery: {
+      screen: Gallery,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    SingleView: {
+      screen: SingleView,
+      navigationOptions: {
+        headerShown: false,
+      },
     },
   },
-  SingleView: {
-    screen: SingleView,
-    navigationOptions: {
-      headerShown: false,
+  {
+    navigationOptions: ({ navigation }) => {
+      let tabBarVisible;
+      if (navigation.state.routes.length > 1) {
+        navigation.state.routes.map((route) => {
+          if (route.routeName === "SingleView") {
+            tabBarVisible = false;
+          } else {
+            tabBarVisible = true;
+          }
+        });
+      }
+
+      return {
+        tabBarVisible,
+      };
     },
-  },
-});
+  }
+);
 
 const accountStackNavigator = createStackNavigator({
   Account: {

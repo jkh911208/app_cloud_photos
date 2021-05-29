@@ -2,9 +2,9 @@ import * as MediaLibrary from "expo-media-library";
 import * as SecureStore from "expo-secure-store";
 
 import { AppState, Dimensions, FlatList } from "react-native";
-import React, { useEffect, useState } from "react";
+import { Header, Image } from "react-native-elements";
+import React, { useEffect, useRef, useState } from "react";
 
-import { Image } from "react-native-elements";
 import JWT from "expo-jwt";
 import { SECRET } from "@env";
 import { SafeAreaView } from "react-navigation";
@@ -89,8 +89,17 @@ const Gallery = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#939597" }}>
+      <Header
+        statusBarProps={{backgroundColor: "#939597"}}
+        centerComponent={{
+          text: "Cloud Photos",
+          style: { color: "#fff", fontSize: 25 },
+        }}
+        containerStyle={{
+          backgroundColor: "#939597",
+        }}
+      />
       <FlatList
-        style={{ marginTop: 15 }}
         horizontal={false}
         numColumns={4}
         data={image}
