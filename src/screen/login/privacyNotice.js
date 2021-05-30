@@ -16,7 +16,7 @@ const PrivacyNotice = ({ navigation }) => {
 
   const agreeAndContinue = () => {
     if (firstSwitch && secondSwitch) {
-      navigation.navigate("Signup");
+      navigation.navigate("loginFlow");
     } else {
       setError("Cannot continue without agreement");
     }

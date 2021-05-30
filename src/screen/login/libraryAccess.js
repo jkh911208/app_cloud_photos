@@ -16,7 +16,7 @@ const LibraryAccess = ({ navigation }) => {
     if (!permission.granted) {
       setError(`Give Cloud Photos permission in setting`);
     } else {
-      navigation.navigate("loginFlow");
+      navigation.navigate("privacyNotice");
     }
   };
 
