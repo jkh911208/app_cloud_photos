@@ -5,6 +5,7 @@ import { Provider as AuthProvider } from "./src/context/AuthContext";
 import BackupFinished from "./src/screen/account/backupFinished";
 import Gallery from "./src/screen/main/gallery";
 import { Icon } from "react-native-elements";
+import LibraryAccess from "./src/screen/login/libraryAccess"
 import LoadedFromCloud from "./src/screen/account/loadedFromCloud";
 import Loading from "./src/screen/login/loading";
 import NeedBackup from "./src/screen/account/needBackup";
@@ -125,6 +126,7 @@ const mainFlowBottomTabNavigator = createBottomTabNavigator(
 
 const switchNavigator = createSwitchNavigator({
   loading: Loading,
+  libraryAccess :LibraryAccess,
   privacyNotice: PrivacyNotice,
   loginFlow: loginFlowStackNavigator,
   mainFlow: mainFlowBottomTabNavigator,

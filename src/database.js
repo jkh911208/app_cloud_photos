@@ -128,7 +128,7 @@ const insertMedia = (
 };
 
 const getMedia = async (setFunction) => {
-  console.log("get entire data");
+  console.log("get Media");
   db.transaction((tx) => {
     tx.executeSql(
       "SELECT * FROM media order by creationTime desc",

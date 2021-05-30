@@ -25,10 +25,11 @@ const Gallery = ({ navigation }) => {
     });
     runInitSetup();
   }, []);
+
   const runInitSetup = async () => {
     await getMedia(setImage);
     await uploadPhotoToCloud();
-    await getCloudData();
+    getCloudData();
   };
 
   useEffect(() => {
@@ -90,7 +91,7 @@ const Gallery = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#939597" }}>
       <Header
-        statusBarProps={{backgroundColor: "#939597"}}
+        statusBarProps={{ backgroundColor: "#939597" }}
         centerComponent={{
           text: "Cloud Photos",
           style: { color: "#fff", fontSize: 25 },

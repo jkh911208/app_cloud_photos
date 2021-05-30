@@ -1,3 +1,4 @@
+import * as MediaLibrary from "expo-media-library";
 import * as SecureStore from "expo-secure-store";
 
 import JWT from "expo-jwt";
@@ -32,7 +33,13 @@ const getLocalToken = (dispatch) => async () => {
     dispatch({ type: "token", payload: token });
     navigate("Gallery");
   } else {
-    navigate("privacyNotice");
+    const permission = await MediaLibrary.getPermissionsAsync();
+    console.log("get local token media permission", permission);
+    if (permission.granted) {
+      navigate("privacyNotice");
+    } else {
+      navigate("libraryAccess");
+    }
   }
 };
 

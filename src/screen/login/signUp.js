@@ -1,23 +1,15 @@
 import { Button, Input, Text } from "react-native-elements";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { Context as AuthContext } from "../../context/AuthContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { StyleSheet } from "react-native";
-import updateLocalPhotoLibrary from "../../compoent/updateLocalPhotoLibrary";
 
 const SignUp = ({ navigation }) => {
   const { state, signup } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
-  useEffect(() => {
-    const runUseEffectAsync = async () => {
-      await updateLocalPhotoLibrary();
-    }
-    runUseEffectAsync()
-  }, []);
 
   return (
     <KeyboardAwareScrollView
