@@ -3,7 +3,7 @@ import * as SecureStore from "expo-secure-store";
 
 import { AppState, Dimensions, FlatList } from "react-native";
 import { Header, Image } from "react-native-elements";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import JWT from "expo-jwt";
 import { SECRET } from "@env";
@@ -58,7 +58,7 @@ const Gallery = ({ navigation }) => {
     await getCloudData();
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
     return (
       <Image
         source={{
@@ -70,13 +70,14 @@ const Gallery = ({ navigation }) => {
           },
         }}
         style={{ width: thumbnailWidth, height: thumbnailWidth, margin: 1 }}
-        onPress={() =>
+        onPress={() => {
+          console.log("index", index);
           navigation.navigate("SingleView", {
-            item: item,
-            // imageList: image,
-            token: token,
-          })
-        }
+            image,
+            token,
+            index,
+          });
+        }}
       />
     );
   };
