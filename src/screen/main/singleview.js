@@ -21,6 +21,15 @@ const SingleView = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
+    const imageHeight = (item.height * imageDisplayWidth) / item.width;
+    var marginTop = 0;
+    // console.log("window height", Dimensions.get("window").height)
+    // console.log("image height", imageHeight)
+    if (imageDisplayWidth > imageHeight) {
+      marginTop = Math.floor(
+        (Dimensions.get("window").height - imageHeight) / 4
+      );
+    }
     return (
       <GestureRecognizer
         onSwipeDown={() => onSwipeDown()}
@@ -37,7 +46,8 @@ const SingleView = ({ navigation }) => {
           }}
           style={{
             width: imageDisplayWidth,
-            height: (item.height * imageDisplayWidth) / item.width,
+            height: imageHeight,
+            marginTop,
           }}
         />
       </GestureRecognizer>
