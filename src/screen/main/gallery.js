@@ -27,7 +27,8 @@ const Gallery = ({ navigation }) => {
   }, []);
 
   const runInitSetup = async () => {
-    await getMedia(setImage);
+    const result = await getMedia(Date.now());
+    setImage(result);
     await uploadPhotoToCloud();
     getCloudData();
   };
@@ -53,9 +54,10 @@ const Gallery = ({ navigation }) => {
 
   const changeListener = async () => {
     await updateLocalPhotoLibrary();
-    await getMedia(setImage);
-    await uploadPhotoToCloud();
     await getCloudData();
+    const result = await getMedia(Date.now());
+    setImage(result)
+    await uploadPhotoToCloud();
   };
 
   const renderItem = ({ item, index }) => {
@@ -89,6 +91,14 @@ const Gallery = ({ navigation }) => {
     setRefreshing(false);
   };
 
+  const onEndReached = async () => {
+    console.log("end reached gallery")
+    const result = await getMedia(image[image.length - 1].creationTime);
+    if (result.length > 0) {
+      setImage(image.concat(result));
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#939597" }}>
       <Header
@@ -109,6 +119,7 @@ const Gallery = ({ navigation }) => {
         keyExtractor={(item) => item.md5}
         onRefresh={reload}
         refreshing={refreshing}
+        onEndReached={onEndReached}
       />
     </SafeAreaView>
   );

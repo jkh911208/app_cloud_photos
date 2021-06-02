@@ -1,16 +1,18 @@
-import { Dimensions, FlatList, StyleSheet } from "react-native";
+import { Dimensions, FlatList, StyleSheet, View } from "react-native";
 import { Header, Image } from "react-native-elements";
+import React, { useState } from "react";
 
 import GestureRecognizer from "react-native-swipe-gestures";
 import JWT from "expo-jwt";
-import React from "react";
 import { SECRET } from "@env";
 import { SafeAreaView } from "react-navigation";
+import { getMedia } from "../../database";
 
 const imageDisplayWidth = Dimensions.get("window").width;
 
 const SingleView = ({ navigation }) => {
   const { token, image, index } = navigation.state.params;
+  const [renderImage, setRenderImage] = useState(image);
 
   const onSwipeDown = () => {
     navigation.goBack();
@@ -22,36 +24,45 @@ const SingleView = ({ navigation }) => {
 
   const renderItem = ({ item }) => {
     const imageHeight = (item.height * imageDisplayWidth) / item.width;
-    var marginTop = 0;
-    // console.log("window height", Dimensions.get("window").height)
-    // console.log("image height", imageHeight)
-    if (imageDisplayWidth > imageHeight) {
-      marginTop = Math.floor(
-        (Dimensions.get("window").height - imageHeight) / 4
-      );
-    }
     return (
       <GestureRecognizer
         onSwipeDown={() => onSwipeDown()}
         onSwipeUp={() => onSwipeUp()}
       >
-        <Image
-          source={{
-            uri: item.uri,
-            cache: "force-cache",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
-            },
-          }}
-          style={{
-            width: imageDisplayWidth,
-            height: imageHeight,
-            marginTop,
-          }}
-        />
+        <View style={styles.container}>
+          <Image
+            source={{
+              uri: item.uri,
+              cache: "force-cache",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
+              },
+            }}
+            style={{
+              width: imageDisplayWidth,
+              height: imageHeight,
+            }}
+            resizeMode="contain"
+            resizeMethod="auto"
+          />
+        </View>
       </GestureRecognizer>
     );
+  };
+
+  const onEndReached = async () => {
+    console.log(
+      "end reached single view",
+      renderImage[renderImage.length - 1].creationTime
+    );
+    const result = await getMedia(
+      renderImage[renderImage.length - 1].creationTime
+    );
+    console.log("result length", result.length);
+    if (result.length > 0) {
+      setRenderImage(renderImage.concat(result));
+    }
   };
 
   return (
@@ -74,10 +85,7 @@ const SingleView = ({ navigation }) => {
           backgroundColor: "black",
         }}
       />
-      <SafeAreaView
-        style={styles.container}
-        forceInset={{ top: "always", bottom: "always" }}
-      >
+      <SafeAreaView style={styles.container}>
         <FlatList
           getItemLayout={(data, index) => {
             return {
@@ -90,10 +98,11 @@ const SingleView = ({ navigation }) => {
           initialNumToRender={1}
           horizontal
           pagingEnabled
-          data={image}
+          data={renderImage}
           showsVerticalScrollIndicator={false}
           renderItem={renderItem}
           keyExtractor={(item) => item.md5}
+          onEndReached={onEndReached}
         />
       </SafeAreaView>
     </>

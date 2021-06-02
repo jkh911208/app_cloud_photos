@@ -127,17 +127,12 @@ const insertMedia = (
   );
 };
 
-const getMedia = async (setFunction) => {
+const getMedia = async (time) => {
   console.log("get Media");
-  db.transaction((tx) => {
-    tx.executeSql(
-      "SELECT * FROM media order by creationTime desc",
-      [],
-      (tx, results) => {
-        setFunction(results.rows._array);
-      }
-    );
-  });
+  const sqlQuery = "SELECT * FROM media WHERE creationTime < ? order by creationTime desc limit 100"
+  const result = await query(sqlQuery, [time])
+  // console.log(result)
+  return result.rows._array
 };
 
 const updateCloudID = async (md5, cloud_id) => {
@@ -164,7 +159,7 @@ const truncateMediaTable = async () => {
   db.exec(
     [
       {
-        sql: `DELETE FROM media WHERE local_id is null;`,
+        sql: `DELETE FROM media;`,
         args: [],
       },
     ],
