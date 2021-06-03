@@ -76,7 +76,9 @@ const uploadPhotoToCloud = async () => {
     if (response.status == 201) {
       var obj = JSON.parse(response.body);
       // console.log(obj)
-      await updateCloudID(fsInfo.md5, obj.id);
+      if (obj) {
+        await updateCloudID(fsInfo.md5, obj.id);
+      }
     }
   }
 };
