@@ -1,6 +1,6 @@
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("cloudphotos.db", "2");
+const db = SQLite.openDatabase("cloudphotosv1.2.5.db");
 
 const query = async (sql, data) => {
   console.log("make sql query");
@@ -27,6 +27,7 @@ const createMediaTable = async () => {
           uri text not null,
           thumbnail_uri text not null,
           creationTime datetime not null,
+          duration DOUBLE not null,
           md5 text primary key not null UNIQUE
       );`,
         [],
@@ -98,15 +99,16 @@ const insertMedia = (
   uri,
   thumbnail_uri,
   creationTime,
-  md5
+  md5,
+  duration
 ) => {
   // console.log("insert data to media table");
   db.exec(
     [
       {
         sql: `insert into media 
-            ( local_id, cloud_id, width, height, uri, thumbnail_uri, creationTime, md5) 
-            values (?,?,?,?,?,?,?,?);`,
+            ( local_id, cloud_id, width, height, uri, thumbnail_uri, creationTime, md5, duration) 
+            values (?,?,?,?,?,?,?,?,?);`,
         args: [
           local_id,
           cloud_id,
@@ -116,6 +118,7 @@ const insertMedia = (
           thumbnail_uri,
           creationTime,
           md5,
+          duration,
         ],
       },
     ],
@@ -131,7 +134,7 @@ const getMedia = async (time) => {
   console.log("get Media");
   const sqlQuery = "SELECT * FROM media WHERE creationTime < ? order by creationTime desc limit 100"
   const result = await query(sqlQuery, [time])
-  // console.log(result)
+  // console.log(result.rows._array)
   return result.rows._array
 };
 

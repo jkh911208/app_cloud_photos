@@ -5,18 +5,12 @@ import { insertMedia } from "../database";
 
 const updateLocalPhotoLibrary = async () => {
   console.log("updateLocalPhotoLibrary");
-  // check permission
-  const permission = await MediaLibrary.getPermissionsAsync();
-  if (!permission.granted) {
-    // get permission
-    const permission = await MediaLibrary.requestPermissionsAsync();
-  }
 
   var options = {
     first: 50,
     sortBy: [["creationTime", false]],
     createdBefore: Date.now(),
-    // mediaType: [MediaLibrary.MediaType.photo, MediaLibrary.MediaType.video],
+    mediaType: [MediaLibrary.MediaType.photo, MediaLibrary.MediaType.video],
   };
 
   while (true) {
@@ -37,7 +31,8 @@ const updateLocalPhotoLibrary = async () => {
         asset.assets[i].uri,
         asset.assets[i].uri,
         asset.assets[i].creationTime,
-        fsInfo.md5
+        fsInfo.md5,
+        asset.assets[i].duration
       );
     }
     if (!asset.hasNextPage) {

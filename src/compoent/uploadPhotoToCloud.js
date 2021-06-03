@@ -62,6 +62,7 @@ const uploadPhotoToCloud = async () => {
         creationTime: image_data.creationTime.toString(),
         height: image_data.height.toString(),
         width: image_data.width.toString(),
+        duration: needUpload[i].duration.toString(),
       },
     };
 

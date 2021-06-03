@@ -46,7 +46,8 @@ const getCloudData = async () => {
         `${API_URL}/api/v1/photo/${data[i].resize}`,
         `${API_URL}/api/v1/photo/${data[i].thumbnail}`,
         data[i].original_datetime,
-        data[i].md5
+        data[i].md5,
+        data[i].duration
       );
 
       lastCloudCreated = Math.max(lastCloudCreated, data[i].created);

@@ -28,6 +28,10 @@ const Gallery = ({ navigation }) => {
 
   const runInitSetup = async () => {
     const result = await getMedia(Date.now());
+    if (result.length == 0) {
+      await updateLocalPhotoLibrary();
+      return runInitSetup();
+    }
     setImage(result);
     await uploadPhotoToCloud();
     getCloudData();
@@ -56,7 +60,7 @@ const Gallery = ({ navigation }) => {
     await updateLocalPhotoLibrary();
     await getCloudData();
     const result = await getMedia(Date.now());
-    setImage(result)
+    setImage(result);
     await uploadPhotoToCloud();
   };
 
@@ -92,7 +96,7 @@ const Gallery = ({ navigation }) => {
   };
 
   const onEndReached = async () => {
-    console.log("end reached gallery")
+    console.log("end reached gallery");
     const result = await getMedia(image[image.length - 1].creationTime);
     if (result.length > 0) {
       setImage(image.concat(result));
