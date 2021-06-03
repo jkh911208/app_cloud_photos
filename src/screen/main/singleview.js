@@ -6,6 +6,7 @@ import GestureRecognizer from "react-native-swipe-gestures";
 import JWT from "expo-jwt";
 import { SECRET } from "@env";
 import { SafeAreaView } from "react-navigation";
+import { Video } from "expo-av";
 import { getMedia } from "../../database";
 
 const imageDisplayWidth = Dimensions.get("window").width;
@@ -23,6 +24,44 @@ const SingleView = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
+    if (item.duration > 0) {
+      return renderVideo(item);
+    } else {
+      return renderPhoto(item);
+    }
+  };
+
+  const renderVideo = (item) => {
+    const imageHeight = (item.height * imageDisplayWidth) / item.width;
+    return (
+      <GestureRecognizer
+        onSwipeDown={() => onSwipeDown()}
+        onSwipeUp={() => onSwipeUp()}
+      >
+        <View style={styles.container}>
+          <Video
+            source={{
+              uri: item.uri,
+              cache: "force-cache",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
+              },
+            }}
+            style={{
+              width: imageDisplayWidth,
+              height: imageHeight,
+            }}
+            useNativeControls
+            resizeMode="contain"
+            resizeMethod="auto"
+          />
+        </View>
+      </GestureRecognizer>
+    );
+  };
+
+  const renderPhoto = (item) => {
     const imageHeight = (item.height * imageDisplayWidth) / item.width;
     return (
       <GestureRecognizer
