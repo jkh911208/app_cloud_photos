@@ -1,11 +1,11 @@
 import * as SecureStore from "expo-secure-store";
 
 import { API_URL, SECRET } from "@env";
+import { checkMD5, insertMedia, updateCloudID } from "../database";
 
 import JWT from "expo-jwt";
 import { Platform } from "react-native";
 import api from "../api/api";
-import { insertMedia } from "../database";
 
 const getCloudData = async () => {
   const token = await SecureStore.getItemAsync("token");
@@ -38,6 +38,10 @@ const getCloudData = async () => {
     // console.log(data);
 
     for (let i = 0; i < data.length; i++) {
+      const md5Exist = await checkMD5(data[i].md5);
+      if (md5Exist == 1) {
+        updateCloudID(data[i].md5, data[i].id);
+      }
       await insertMedia(
         null,
         data[i].id,

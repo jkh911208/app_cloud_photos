@@ -27,10 +27,10 @@ const Gallery = ({ navigation }) => {
   }, []);
 
   const runInitSetup = async () => {
-    const result = await getMedia(Date.now());
+    var result = await getMedia(Date.now());
     if (result.length == 0) {
       await updateLocalPhotoLibrary();
-      return runInitSetup();
+      result = await getMedia(Date.now());
     }
     setImage(result);
     await uploadPhotoToCloud();

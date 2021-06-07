@@ -91,6 +91,15 @@ const dropMediaTable = () => {
   );
 };
 
+const checkMD5 = async (md5) => {
+  console.log("check MD5");
+  const sqlQuery = "select * from media where md5 = ?";
+  const data = [md5];
+  const result = await query(sqlQuery, data);
+  // console.log(result)
+  return result.rows.length
+};
+
 const insertMedia = (
   local_id,
   cloud_id,
@@ -132,10 +141,11 @@ const insertMedia = (
 
 const getMedia = async (time) => {
   console.log("get Media");
-  const sqlQuery = "SELECT * FROM media WHERE creationTime < ? order by creationTime desc limit 100"
-  const result = await query(sqlQuery, [time])
+  const sqlQuery =
+    "SELECT * FROM media WHERE creationTime < ? order by creationTime desc limit 100";
+  const result = await query(sqlQuery, [time]);
   // console.log(result.rows._array)
-  return result.rows._array
+  return result.rows._array;
 };
 
 const updateCloudID = async (md5, cloud_id) => {
@@ -219,6 +229,7 @@ const getLoadedFromCloud = (setFunction) => {
 
 export {
   db,
+  checkMD5,
   getMedia,
   createMediaTable,
   dropMediaTable,
