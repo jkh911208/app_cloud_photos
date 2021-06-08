@@ -5,12 +5,16 @@ const db = SQLite.openDatabase("cloudphotosv1.2.5.db");
 const query = async (sql, data) => {
   console.log("make sql query");
   return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(sql, data, (tx, result) => {
-        // console.log(result)
-        resolve(result);
+    try {
+      db.transaction((tx) => {
+        tx.executeSql(sql, data, (tx, result) => {
+          // console.log(result)
+          resolve(result);
+        });
       });
-    });
+    } catch {
+      reject(false);
+    }
   });
 };
 
@@ -97,7 +101,7 @@ const checkMD5 = async (md5) => {
   const data = [md5];
   const result = await query(sqlQuery, data);
   // console.log(result)
-  return result.rows.length
+  return result.rows.length;
 };
 
 const insertMedia = (
@@ -139,11 +143,40 @@ const insertMedia = (
   );
 };
 
-const getMedia = async (time) => {
+const insertMediaAsync = async (
+  local_id,
+  cloud_id,
+  width,
+  height,
+  uri,
+  thumbnail_uri,
+  creationTime,
+  md5,
+  duration
+) => {
+  console.log("insert Media Async");
+  const sqlQuery = `insert into media 
+  ( local_id, cloud_id, width, height, uri, thumbnail_uri, creationTime, md5, duration) 
+  values (?,?,?,?,?,?,?,?,?);`;
+  const result = await query(sqlQuery, [
+    local_id,
+    cloud_id,
+    width,
+    height,
+    uri,
+    thumbnail_uri,
+    creationTime,
+    md5,
+    duration,
+  ]);
+  return result;
+};
+
+const getMedia = async (time, limit=100) => {
   console.log("get Media");
   const sqlQuery =
-    "SELECT * FROM media WHERE creationTime < ? order by creationTime desc limit 100";
-  const result = await query(sqlQuery, [time]);
+    "SELECT * FROM media WHERE creationTime < ? order by creationTime desc limit ?";
+  const result = await query(sqlQuery, [time, limit]);
   // console.log(result.rows._array)
   return result.rows._array;
 };

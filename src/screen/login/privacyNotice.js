@@ -3,7 +3,7 @@ import { Linking, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { SafeAreaView } from "react-navigation";
-import updateLocalPhotoLibrary from "../../compoent/updateLocalPhotoLibrary";
+import updateEnitreLibrary from "../../compoent/updateEntireLibrary";
 
 const PrivacyNotice = ({ navigation }) => {
   const [firstSwitch, setFirstSwitch] = useState(false);
@@ -23,7 +23,7 @@ const PrivacyNotice = ({ navigation }) => {
   };
 
   useEffect(() => {
-    updateLocalPhotoLibrary();
+    updateEnitreLibrary();
   }, []);
 
   return (
