@@ -59,7 +59,7 @@ const Gallery = ({ navigation }) => {
   const changeListener = async () => {
     await updateLocalPhotoLibrary();
     await getCloudData();
-    const result = await getMedia(Date.now(). image.length);
+    const result = await getMedia(Date.now(), image.length);
     setImage(result);
     await uploadPhotoToCloud();
   };
