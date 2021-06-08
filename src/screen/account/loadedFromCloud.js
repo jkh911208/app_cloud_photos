@@ -29,6 +29,9 @@ function LoadedFromCloud({ navigation }) {
           },
         }}
         style={{ width: thumbnailWidth, height: thumbnailWidth }}
+        onPress={()=> {
+          console.log(item)
+        }}
       />
     );
   };

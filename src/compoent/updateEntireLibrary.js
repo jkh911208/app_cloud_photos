@@ -7,7 +7,7 @@ const updateEnitreLibrary = async () => {
   console.log("updateLocalPhotoLibrary");
 
   var options = {
-    first: 50,
+    first: 100,
     sortBy: [["creationTime", false]],
     createdBefore: Date.now(),
     mediaType: [MediaLibrary.MediaType.photo, MediaLibrary.MediaType.video],

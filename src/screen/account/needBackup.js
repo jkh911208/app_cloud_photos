@@ -21,6 +21,9 @@ function NeedBackup() {
           uri: item.thumbnail_uri,
         }}
         style={{ width: thumbnailWidth, height: thumbnailWidth }}
+        onPress={()=> {
+          console.log(item)
+        }}
       />
     );
   };

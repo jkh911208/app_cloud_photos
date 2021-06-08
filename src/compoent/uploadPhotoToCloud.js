@@ -4,7 +4,7 @@ import * as Network from "expo-network";
 import * as SecureStore from "expo-secure-store";
 
 import { API_URL, SECRET } from "@env";
-import { db, updateCloudID } from "../database";
+import { db, updateCloudIDAsync } from "../database";
 
 import { FileSystemUploadType } from "expo-file-system";
 import JWT from "expo-jwt";
@@ -77,7 +77,7 @@ const uploadPhotoToCloud = async () => {
       var obj = JSON.parse(response.body);
       // console.log(obj)
       if (obj) {
-        await updateCloudID(fsInfo.md5, obj.id);
+        await updateCloudIDAsync(fsInfo.md5, obj.id);
       }
     }
   }
@@ -88,8 +88,8 @@ const getNeedUpload = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        `SELECT * FROM media WHERE cloud_id IS NULL AND creationTime > ?;`,
-        [sevenDaysAgo],
+        `SELECT * FROM media WHERE cloud_id IS NULL AND creationTime > ? AND duration = ?;`,
+        [sevenDaysAgo, 0],
         (tx, result) => {
           // console.log(result.rows.length);
           resolve(result.rows._array);

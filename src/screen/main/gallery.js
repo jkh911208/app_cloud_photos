@@ -41,6 +41,7 @@ const Gallery = ({ navigation }) => {
     AppState.addEventListener("change", _handleAppStateChange);
 
     MediaLibrary.addListener((event) => {
+      console.log("media library changed");
       changeListener();
     });
 
@@ -52,16 +53,21 @@ const Gallery = ({ navigation }) => {
 
   const _handleAppStateChange = (nextAppState) => {
     if (nextAppState === "active") {
+      console.log("app state changed");
       changeListener();
     }
   };
 
   const changeListener = async () => {
-    await updateLocalPhotoLibrary();
-    await getCloudData();
-    const result = await getMedia(Date.now(), image.length);
-    setImage(result);
-    await uploadPhotoToCloud();
+    if (AppState.currentState == "active") {
+      await updateLocalPhotoLibrary();
+      await getCloudData();
+      const result = await getMedia(Date.now(), image.length > 0 ? image.length : 100);
+      setImage(result);
+      await uploadPhotoToCloud();
+    } else {
+      console.log("app state", AppState.currentState);
+    }
   };
 
   const renderItem = ({ item, index }) => {
@@ -97,7 +103,7 @@ const Gallery = ({ navigation }) => {
 
   const onEndReached = async () => {
     console.log("end reached gallery");
-    const result = await getMedia(image[image.length - 1].creationTime);
+    const result = await getMedia(image[image.length - 1].creationTime, image.length);
     if (result.length > 0) {
       setImage(image.concat(result));
     }

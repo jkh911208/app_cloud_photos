@@ -1,7 +1,7 @@
 import * as SecureStore from "expo-secure-store";
 
 import { API_URL, SECRET } from "@env";
-import { checkMD5, insertMedia, updateCloudID } from "../database";
+import { checkMD5, insertMedia, updateCloudIDAsync } from "../database";
 
 import JWT from "expo-jwt";
 import { Platform } from "react-native";
@@ -40,19 +40,20 @@ const getCloudData = async () => {
     for (let i = 0; i < data.length; i++) {
       const md5Exist = await checkMD5(data[i].md5);
       if (md5Exist == 1) {
-        updateCloudID(data[i].md5, data[i].id);
+        await updateCloudIDAsync(data[i].md5, data[i].id);
+      } else {
+        await insertMedia(
+          null,
+          data[i].id,
+          data[i].original_width,
+          data[i].original_height,
+          `${API_URL}/api/v1/photo/${data[i].resize}`,
+          `${API_URL}/api/v1/photo/${data[i].thumbnail}`,
+          data[i].original_datetime,
+          data[i].md5,
+          data[i].duration
+        );
       }
-      await insertMedia(
-        null,
-        data[i].id,
-        data[i].original_width,
-        data[i].original_height,
-        `${API_URL}/api/v1/photo/${data[i].resize}`,
-        `${API_URL}/api/v1/photo/${data[i].thumbnail}`,
-        data[i].original_datetime,
-        data[i].md5,
-        data[i].duration
-      );
 
       lastCloudCreated = Math.max(lastCloudCreated, data[i].created);
     }

@@ -172,7 +172,7 @@ const insertMediaAsync = async (
   return result;
 };
 
-const getMedia = async (time, limit=100) => {
+const getMedia = async (time, limit = 100) => {
   console.log("get Media");
   const sqlQuery =
     "SELECT * FROM media WHERE creationTime < ? order by creationTime desc limit ?";
@@ -198,6 +198,14 @@ const updateCloudID = async (md5, cloud_id) => {
       console.log("updateCloudID result", result);
     }
   );
+};
+
+const updateCloudIDAsync = async (md5, cloud_id) => {
+  console.log("get Media");
+  const sqlQuery = "UPDATE media SET cloud_id = ? WHERE md5 = ?;";
+  const result = await query(sqlQuery, [cloud_id, md5]);
+  console.log(result);
+  return result.rows._array;
 };
 
 const truncateMediaTable = async () => {
@@ -236,8 +244,8 @@ const getNeedBackup = (setFunction) => {
   const sevenDaysAgo = Date.now() - 604800000;
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT * FROM media where cloud_id is null and local_id is not null AND creationTime > ? order by creationTime desc",
-      [sevenDaysAgo],
+      "SELECT * FROM media where cloud_id is null and local_id is not null AND creationTime > ? AND duration = ? order by creationTime desc",
+      [sevenDaysAgo, 0],
       (tx, results) => {
         // console.log(results);
         setFunction(results.rows._array);
@@ -274,4 +282,6 @@ export {
   getBackupFinished,
   getNeedBackup,
   getLoadedFromCloud,
+  insertMediaAsync,
+  updateCloudIDAsync,
 };
