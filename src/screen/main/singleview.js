@@ -1,5 +1,6 @@
+import { Button, Footer, FooterTab } from "native-base";
 import { Dimensions, FlatList, StyleSheet, View } from "react-native";
-import { Header, Image } from "react-native-elements";
+import { Icon, Image } from "react-native-elements";
 import React, { useState } from "react";
 
 import GestureRecognizer from "react-native-swipe-gestures";
@@ -14,7 +15,6 @@ const imageDisplayWidth = Dimensions.get("window").width;
 const SingleView = ({ navigation }) => {
   const { token, image, index } = navigation.state.params;
   const [renderImage, setRenderImage] = useState(image);
-
   const onSwipeDown = () => {
     navigation.goBack();
   };
@@ -23,7 +23,7 @@ const SingleView = ({ navigation }) => {
     console.log("swipe up");
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
     if (item.duration > 0) {
       return renderVideo(item);
     } else {
@@ -82,7 +82,6 @@ const SingleView = ({ navigation }) => {
               width: imageDisplayWidth,
               height: imageHeight,
             }}
-            resizeMode="contain"
             resizeMethod="auto"
           />
         </View>
@@ -106,24 +105,6 @@ const SingleView = ({ navigation }) => {
 
   return (
     <>
-      <Header
-        statusBarProps={{ backgroundColor: "black" }}
-        leftComponent={{
-          icon: "chevron-left",
-          color: "#fff",
-          size: 25,
-          onPress: () => {
-            navigation.goBack();
-          },
-        }}
-        centerComponent={{
-          text: "Cloud Photos",
-          style: { color: "#fff", fontSize: 25 },
-        }}
-        containerStyle={{
-          backgroundColor: "black",
-        }}
-      />
       <SafeAreaView style={styles.container}>
         <FlatList
           getItemLayout={(data, index) => {
@@ -134,7 +115,7 @@ const SingleView = ({ navigation }) => {
             };
           }}
           initialScrollIndex={index}
-          initialNumToRender={1}
+          initialNumToRender={3}
           horizontal
           pagingEnabled
           data={renderImage}
@@ -142,17 +123,43 @@ const SingleView = ({ navigation }) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.md5}
           onEndReached={onEndReached}
+          updateCellsBatchingPeriod={2000}
         />
+        <Footer>
+          <FooterTab style={styles.footer}>
+            <Button>
+              <Icon name="share" color={"white"} type="feather" />
+            </Button>
+            <Button>
+              <Icon name="info" color={"white"} type="feather" />
+            </Button>
+            <Button>
+              <Icon name="trash" color={"white"} type="feather" />
+            </Button>
+            <Button>
+              <Icon
+                name="chevron-left"
+                color={"white"}
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              />
+            </Button>
+          </FooterTab>
+        </Footer>
       </SafeAreaView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  footer: {
+    backgroundColor: "black",
+  },
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignContent: "space-between",
+    justifyContent: "space-evenly",
     backgroundColor: "black",
   },
 });
