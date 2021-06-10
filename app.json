@@ -2,7 +2,7 @@
   "expo": {
     "name": "Cloud Photos",
     "slug": "cloud_photos",
-    "version": "1.2.9",
+    "version": "1.2.10",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -22,7 +22,7 @@
       "supportsTablet": false,
       "infoPlist": {
         "NSPhotoLibraryAddUsageDescription": "Give Cloud Photos permission to delete photos",
-        "NSPhotoLibraryUsageDescription": "Give Cloud Photos permission to access your photos"
+        "NSPhotoLibraryUsageDescription": "Give Cloud Photos permission to access your photos to view, manage and backup to Cloud"
       }
     },
     "android": {
