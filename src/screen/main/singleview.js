@@ -1,19 +1,22 @@
+import * as MediaLibrary from "expo-media-library";
+
+import { Alert, Dimensions, FlatList, StyleSheet, View } from "react-native";
 import { Button, Footer, FooterTab } from "native-base";
-import { Dimensions, FlatList, StyleSheet, View } from "react-native";
 import { Icon, Image } from "react-native-elements";
 import React, { useState } from "react";
+import { deleteUsingMD5Async, getMedia } from "../../database";
 
 import GestureRecognizer from "react-native-swipe-gestures";
 import JWT from "expo-jwt";
 import { SECRET } from "@env";
 import { SafeAreaView } from "react-navigation";
 import { Video } from "expo-av";
-import { getMedia } from "../../database";
+import api from "../../api/api"
 
 const imageDisplayWidth = Dimensions.get("window").width;
 
 const SingleView = ({ navigation }) => {
-  const { token, image, index } = navigation.state.params;
+  const { token, image, index, setThumbImage } = navigation.state.params;
   const [renderImage, setRenderImage] = useState(image);
   const onSwipeDown = () => {
     navigation.goBack();
@@ -23,15 +26,113 @@ const SingleView = ({ navigation }) => {
     console.log("swipe up");
   };
 
+  const deleteAlert = async () =>
+    new Promise((resolve) => {
+      Alert.alert(
+        "Delete Image",
+        "Do you want to delete image from Cloud?",
+        [
+          {
+            text: "Cancel",
+            onPress: async () => {
+              resolve(false);
+            },
+            style: "cancel",
+          },
+          {
+            text: "Delete",
+            onPress: async () => {
+              resolve(true);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    });
+
+  const CustomFooter = ({ index }) => {
+    return (
+      <Footer>
+        <FooterTab style={styles.footer}>
+          <Button>
+            <Icon name="share" color={"white"} type="feather" />
+          </Button>
+          <Button>
+            <Icon name="info" color={"white"} type="feather" />
+          </Button>
+          <Button>
+            <Icon
+              name="trash"
+              color={"white"}
+              type="feather"
+              onPress={async () => {
+                console.log(renderImage[index]);
+                const id = renderImage[index].local_id;
+                const md5 = renderImage[index].md5;
+                const cloudId = renderImage[index].cloud_id;
+                var deleteResult = null;
+                if (id != null) {
+                  try {
+                    deleteResult = await MediaLibrary.deleteAssetsAsync(id);
+                  } catch {
+                    deleteResult = false;
+                  }
+                } else {
+                  deleteResult = await deleteAlert();
+                }
+                console.log("delete result", deleteResult);
+
+                if (deleteResult) {
+                  var temp = [];
+                  for (let i = 0; i < renderImage.length; i++) {
+                    if (i != index) {
+                      temp.push(renderImage[i]);
+                    }
+                  }
+                  setRenderImage(temp);
+                  setThumbImage(temp);
+                  deleteUsingMD5Async(md5);
+                  if (cloudId) {
+                    const config = {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                        "X-Custom-Auth": JWT.encode(
+                          { timestamp: Date.now() },
+                          SECRET
+                        ),
+                      },
+                    };
+                    // console.log(config);
+                    // console.log(api);
+                    api.delete(`/api/v1/photo/${cloudId}`, config);
+                  }
+                }
+              }}
+            />
+          </Button>
+          <Button>
+            <Icon
+              name="chevron-left"
+              color={"white"}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+          </Button>
+        </FooterTab>
+      </Footer>
+    );
+  };
+
   const renderItem = ({ item, index }) => {
     if (item.duration > 0) {
-      return renderVideo(item);
+      return renderVideo(item, index);
     } else {
-      return renderPhoto(item);
+      return renderPhoto(item, index);
     }
   };
 
-  const renderVideo = (item) => {
+  const renderVideo = (item, index) => {
     const imageHeight = (item.height * imageDisplayWidth) / item.width;
     return (
       <GestureRecognizer
@@ -57,11 +158,12 @@ const SingleView = ({ navigation }) => {
             resizeMethod="auto"
           />
         </View>
+        <CustomFooter index={index} />
       </GestureRecognizer>
     );
   };
 
-  const renderPhoto = (item) => {
+  const renderPhoto = (item, index) => {
     const imageHeight = (item.height * imageDisplayWidth) / item.width;
     return (
       <GestureRecognizer
@@ -85,6 +187,7 @@ const SingleView = ({ navigation }) => {
             resizeMethod="auto"
           />
         </View>
+        <CustomFooter index={index} />
       </GestureRecognizer>
     );
   };
@@ -99,7 +202,9 @@ const SingleView = ({ navigation }) => {
     );
     console.log("result length", result.length);
     if (result.length > 0) {
-      setRenderImage(renderImage.concat(result));
+      const temp = renderImage.concat(result);
+      setRenderImage(temp);
+      setThumbImage(temp);
     }
   };
 
@@ -125,28 +230,6 @@ const SingleView = ({ navigation }) => {
           onEndReached={onEndReached}
           updateCellsBatchingPeriod={2000}
         />
-        <Footer>
-          <FooterTab style={styles.footer}>
-            <Button>
-              <Icon name="share" color={"white"} type="feather" />
-            </Button>
-            <Button>
-              <Icon name="info" color={"white"} type="feather" />
-            </Button>
-            <Button>
-              <Icon name="trash" color={"white"} type="feather" />
-            </Button>
-            <Button>
-              <Icon
-                name="chevron-left"
-                color={"white"}
-                onPress={() => {
-                  navigation.goBack();
-                }}
-              />
-            </Button>
-          </FooterTab>
-        </Footer>
       </SafeAreaView>
     </>
   );

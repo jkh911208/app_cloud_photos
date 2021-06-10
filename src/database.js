@@ -254,6 +254,15 @@ const getNeedBackup = (setFunction) => {
   });
 };
 
+const deleteUsingMD5Async = async (md5) => {
+  console.log("check MD5");
+  const sqlQuery = "delete from media where md5 = ?";
+  const data = [md5];
+  const result = await query(sqlQuery, data);
+  console.log(result);
+  return result;
+};
+
 const getLoadedFromCloud = (setFunction) => {
   console.log("getBackupFinished");
   db.transaction((tx) => {
@@ -284,4 +293,5 @@ export {
   getLoadedFromCloud,
   insertMediaAsync,
   updateCloudIDAsync,
+  deleteUsingMD5Async,
 };

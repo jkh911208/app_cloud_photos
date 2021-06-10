@@ -64,7 +64,10 @@ const Gallery = ({ navigation }) => {
     if (AppState.currentState == "active") {
       await updateLocalPhotoLibrary();
       await getCloudData();
-      const result = await getMedia(Date.now(), image.length > 0 ? image.length : 100);
+      const result = await getMedia(
+        Date.now(),
+        image.length > 0 ? image.length : 100
+      );
       setImage(result);
       await uploadPhotoToCloud();
     } else {
@@ -90,6 +93,7 @@ const Gallery = ({ navigation }) => {
             image,
             token,
             index,
+            setThumbImage: setImage,
           });
         }}
       />
@@ -105,7 +109,10 @@ const Gallery = ({ navigation }) => {
 
   const onEndReached = async () => {
     console.log("end reached gallery");
-    const result = await getMedia(image[image.length - 1].creationTime, image.length);
+    const result = await getMedia(
+      image[image.length - 1].creationTime,
+      image.length
+    );
     if (result.length > 0) {
       setImage(image.concat(result));
     }
