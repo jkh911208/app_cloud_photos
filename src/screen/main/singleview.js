@@ -72,6 +72,7 @@ const SingleView = ({ navigation }) => {
                 const cloudId = renderImage[index].cloud_id;
                 var deleteResult = null;
                 if (id != null) {
+                  // if android ask user
                   try {
                     deleteResult = await MediaLibrary.deleteAssetsAsync(id);
                   } catch {

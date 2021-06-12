@@ -66,6 +66,13 @@ const signup =
         payload: "Username must at least 7 characters",
       });
     }
+    // username cannot have whitespace
+    if (username.indexOf(" ") >= 0) {
+      return dispatch({
+        type: "error",
+        payload: "Username should not contain white space",
+      });
+    }
     // username need to start with english alphabet
     if (!/[a-zA-Z]/.test(username.charAt(0))) {
       return dispatch({
@@ -109,6 +116,14 @@ const signup =
         type: "error",
         payload:
           "Password must contain at least 1 upper alphabetical character",
+      });
+    }
+    // password must contain at least 1 number
+    if (password.search(/[0-9]/) < 0) {
+      return dispatch({
+        type: "error",
+        payload:
+          "Password must contain at least 1 number",
       });
     }
     // password must contain at least 1 special character

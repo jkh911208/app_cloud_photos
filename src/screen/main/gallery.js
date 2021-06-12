@@ -96,6 +96,9 @@ const Gallery = ({ navigation }) => {
             setThumbImage: setImage,
           });
         }}
+        onError={() => {
+          console.log("not able to load")
+        }}
       />
     );
   };
