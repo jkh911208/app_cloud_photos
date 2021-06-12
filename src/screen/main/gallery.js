@@ -4,12 +4,12 @@ import * as SecureStore from "expo-secure-store";
 import { AppState, Dimensions, FlatList } from "react-native";
 import { Header, Image } from "react-native-elements";
 import React, { useEffect, useState } from "react";
+import { deleteUsingMD5Async, getMedia } from "../../database";
 
 import JWT from "expo-jwt";
 import { SECRET } from "@env";
 import { SafeAreaView } from "react-navigation";
 import getCloudData from "../../compoent/getCloudData";
-import { getMedia } from "../../database";
 import updateLocalPhotoLibrary from "../../compoent/updateLocalPhotoLibrary";
 import uploadPhotoToCloud from "../../compoent/uploadPhotoToCloud";
 
@@ -96,8 +96,10 @@ const Gallery = ({ navigation }) => {
             setThumbImage: setImage,
           });
         }}
-        onError={() => {
-          console.log("not able to load")
+        onError={async () => {
+          console.log("not able to load gallery view");
+          await deleteUsingMD5Async(item.md5);
+          setImage(await getMedia(Date.now(), image.length));
         }}
       />
     );

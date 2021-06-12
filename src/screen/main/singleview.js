@@ -157,6 +157,13 @@ const SingleView = ({ navigation }) => {
             useNativeControls
             resizeMode="contain"
             resizeMethod="auto"
+            onError={async () => {
+              console.log("not able to load single view video");
+              await deleteUsingMD5Async(item.md5);
+              const media = await getMedia(Date.now(), renderImage.length)
+              setRenderImage(media);
+              setThumbImage(media)
+            }}
           />
         </View>
         <CustomFooter index={index} />
@@ -186,6 +193,13 @@ const SingleView = ({ navigation }) => {
               height: imageHeight,
             }}
             resizeMethod="auto"
+            onError={async () => {
+              console.log("not able to load single view photo");
+              await deleteUsingMD5Async(item.md5);
+              const media = await getMedia(Date.now(), renderImage.length)
+              setRenderImage(media);
+              setThumbImage(media)
+            }}
           />
         </View>
         <CustomFooter index={index} />
