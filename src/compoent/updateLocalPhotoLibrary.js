@@ -3,8 +3,9 @@ import * as MediaLibrary from "expo-media-library";
 
 import { checkMD5, insertMedia } from "../database";
 
-const updateLocalPhotoLibrary = async () => {
-  console.log("updateLocalPhotoLibrary");
+const updateLocalPhotoLibrary = async (finishTime = 0) => {
+  console.log("updateLocalPhotoLibrary", finishTime);
+  var updated = false;
 
   var options = {
     first: 50,
@@ -24,13 +25,17 @@ const updateLocalPhotoLibrary = async () => {
       // console.log(fsInfo);
       // console.log("updatel local photo library", asset.assets[i])
 
+      if (asset.assets[i].creationTime < finishTime) {
+        exitLoop = true;
+      }
+
       // check md5
       const md5Exist = await checkMD5(fsInfo.md5);
       console.log("md5 exist", md5Exist);
       if (md5Exist == 1) {
-        exitLoop = true;
-        break;
+        console.log("md5 exist");
       } else {
+        updated = true;
         await insertMedia(
           asset.assets[i].id,
           null,
@@ -49,6 +54,7 @@ const updateLocalPhotoLibrary = async () => {
     }
     options.createdBefore = asset.assets[asset.assets.length - 1].creationTime;
   }
+  return updated;
 };
 
 export default updateLocalPhotoLibrary;

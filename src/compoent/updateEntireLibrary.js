@@ -4,7 +4,7 @@ import * as MediaLibrary from "expo-media-library";
 import { insertMediaAsync } from "../database";
 
 const updateEnitreLibrary = async () => {
-  console.log("updateLocalPhotoLibrary");
+  console.log("update entire PhotoLibrary");
 
   var options = {
     first: 100,

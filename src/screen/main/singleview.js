@@ -11,7 +11,7 @@ import JWT from "expo-jwt";
 import { SECRET } from "@env";
 import { SafeAreaView } from "react-navigation";
 import { Video } from "expo-av";
-import api from "../../api/api"
+import api from "../../api/api";
 
 const imageDisplayWidth = Dimensions.get("window").width;
 
@@ -24,6 +24,7 @@ const SingleView = ({ navigation }) => {
 
   const onSwipeUp = () => {
     console.log("swipe up");
+    console.log(renderImage[index])
   };
 
   const deleteAlert = async () =>
@@ -72,7 +73,6 @@ const SingleView = ({ navigation }) => {
                 const cloudId = renderImage[index].cloud_id;
                 var deleteResult = null;
                 if (id != null) {
-                  // if android ask user
                   try {
                     deleteResult = await MediaLibrary.deleteAssetsAsync(id);
                   } catch {
@@ -126,6 +126,7 @@ const SingleView = ({ navigation }) => {
   };
 
   const renderItem = ({ item, index }) => {
+    // console.log(`render item index of ${index}`)
     if (item.duration > 0) {
       return renderVideo(item, index);
     } else {
@@ -160,9 +161,9 @@ const SingleView = ({ navigation }) => {
             onError={async () => {
               console.log("not able to load single view video");
               await deleteUsingMD5Async(item.md5);
-              const media = await getMedia(Date.now(), renderImage.length)
+              const media = await getMedia(Date.now(), renderImage.length);
               setRenderImage(media);
-              setThumbImage(media)
+              setThumbImage(media);
             }}
           />
         </View>
@@ -196,9 +197,9 @@ const SingleView = ({ navigation }) => {
             onError={async () => {
               console.log("not able to load single view photo");
               await deleteUsingMD5Async(item.md5);
-              const media = await getMedia(Date.now(), renderImage.length)
+              const media = await getMedia(Date.now(), renderImage.length);
               setRenderImage(media);
-              setThumbImage(media)
+              setThumbImage(media);
             }}
           />
         </View>
@@ -235,7 +236,7 @@ const SingleView = ({ navigation }) => {
             };
           }}
           initialScrollIndex={index}
-          initialNumToRender={3}
+          // initialNumToRender={3}
           horizontal
           pagingEnabled
           data={renderImage}
@@ -243,7 +244,7 @@ const SingleView = ({ navigation }) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.md5}
           onEndReached={onEndReached}
-          updateCellsBatchingPeriod={2000}
+          // updateCellsBatchingPeriod={2000}
         />
       </SafeAreaView>
     </>
