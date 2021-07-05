@@ -16,15 +16,16 @@ import api from "../../api/api";
 const imageDisplayWidth = Dimensions.get("window").width;
 
 const SingleView = ({ navigation }) => {
-  const { token, image, index, setThumbImage } = navigation.state.params;
+  const { token, image, initIndex, setThumbImage } = navigation.state.params;
   const [renderImage, setRenderImage] = useState(image);
+  var currentIndex = initIndex;
+
   const onSwipeDown = () => {
     navigation.goBack();
   };
 
   const onSwipeUp = () => {
     console.log("swipe up");
-    console.log(renderImage[index])
   };
 
   const deleteAlert = async () =>
@@ -51,7 +52,7 @@ const SingleView = ({ navigation }) => {
       );
     });
 
-  const CustomFooter = ({ index }) => {
+  const CustomFooter = () => {
     return (
       <Footer>
         <FooterTab style={styles.footer}>
@@ -67,10 +68,11 @@ const SingleView = ({ navigation }) => {
               color={"white"}
               type="feather"
               onPress={async () => {
-                console.log(renderImage[index]);
-                const id = renderImage[index].local_id;
-                const md5 = renderImage[index].md5;
-                const cloudId = renderImage[index].cloud_id;
+                console.log("delete current index of", currentIndex);
+                console.log(renderImage[currentIndex]);
+                const id = renderImage[currentIndex].local_id;
+                const md5 = renderImage[currentIndex].md5;
+                const cloudId = renderImage[currentIndex].cloud_id;
                 var deleteResult = null;
                 if (id != null) {
                   try {
@@ -86,7 +88,7 @@ const SingleView = ({ navigation }) => {
                 if (deleteResult) {
                   var temp = [];
                   for (let i = 0; i < renderImage.length; i++) {
-                    if (i != index) {
+                    if (i != currentIndex) {
                       temp.push(renderImage[i]);
                     }
                   }
@@ -126,15 +128,15 @@ const SingleView = ({ navigation }) => {
   };
 
   const renderItem = ({ item, index }) => {
-    // console.log(`render item index of ${index}`)
+    console.log(`render item index of ${index}`);
     if (item.duration > 0) {
-      return renderVideo(item, index);
+      return renderVideo(item);
     } else {
-      return renderPhoto(item, index);
+      return renderPhoto(item);
     }
   };
 
-  const renderVideo = (item, index) => {
+  const renderVideo = (item) => {
     const imageHeight = (item.height * imageDisplayWidth) / item.width;
     return (
       <GestureRecognizer
@@ -167,12 +169,11 @@ const SingleView = ({ navigation }) => {
             }}
           />
         </View>
-        <CustomFooter index={index} />
       </GestureRecognizer>
     );
   };
 
-  const renderPhoto = (item, index) => {
+  const renderPhoto = (item) => {
     const imageHeight = (item.height * imageDisplayWidth) / item.width;
     return (
       <GestureRecognizer
@@ -203,7 +204,6 @@ const SingleView = ({ navigation }) => {
             }}
           />
         </View>
-        <CustomFooter index={index} />
       </GestureRecognizer>
     );
   };
@@ -228,15 +228,15 @@ const SingleView = ({ navigation }) => {
     <>
       <SafeAreaView style={styles.container}>
         <FlatList
-          getItemLayout={(data, index) => {
+          getItemLayout={(renderItem, index) => {
+            // console.log("get item layout called", index, renderItem.length);
             return {
               length: imageDisplayWidth,
               index,
               offset: imageDisplayWidth * index,
             };
           }}
-          initialScrollIndex={index}
-          // initialNumToRender={3}
+          initialScrollIndex={initIndex}
           horizontal
           pagingEnabled
           data={renderImage}
@@ -244,8 +244,13 @@ const SingleView = ({ navigation }) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.md5}
           onEndReached={onEndReached}
-          // updateCellsBatchingPeriod={2000}
+          onMomentumScrollEnd={(ev) => {
+            currentIndex = Math.floor(
+              ev.nativeEvent.contentOffset.x / imageDisplayWidth
+            );
+          }}
         />
+        <CustomFooter />
       </SafeAreaView>
     </>
   );

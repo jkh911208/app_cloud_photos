@@ -18,6 +18,7 @@ const Gallery = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [image, setImage] = useState([]);
   const [token, setToken] = useState(null);
+  var appState = AppState.currentState
 
   useEffect(() => {
     SecureStore.getItemAsync("token").then((result) => {
@@ -46,10 +47,12 @@ const Gallery = ({ navigation }) => {
   }, []);
 
   const _handleAppStateChange = (nextAppState) => {
-    if (nextAppState === "active") {
-      console.log("app state changed");
+    console.log("app state changed", appState, nextAppState);
+    if (appState === "background" && nextAppState === "active") {
+      console.log("changed from background to active");
       changeListener();
     }
+    appState = nextAppState
   };
 
   const changeListener = async () => {
@@ -95,7 +98,7 @@ const Gallery = ({ navigation }) => {
           navigation.navigate("SingleView", {
             image,
             token,
-            index,
+            initIndex: index,
             setThumbImage: setImage,
           });
         }}
