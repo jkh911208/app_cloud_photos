@@ -3,7 +3,7 @@ import * as MediaLibrary from "expo-media-library";
 import { Alert, Dimensions, FlatList, StyleSheet, View } from "react-native";
 import { Button, Footer, FooterTab } from "native-base";
 import { Icon, Image } from "react-native-elements";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { deleteUsingMD5Async, getMedia } from "../../database";
 
 import GestureRecognizer from "react-native-swipe-gestures";
@@ -18,6 +18,7 @@ const imageDisplayWidth = Dimensions.get("window").width;
 const SingleView = ({ navigation }) => {
   const { token, image, initIndex, setThumbImage } = navigation.state.params;
   const [renderImage, setRenderImage] = useState(image);
+  const flatlistRef = useRef();
   var currentIndex = initIndex;
 
   const onSwipeDown = () => {
@@ -87,12 +88,16 @@ const SingleView = ({ navigation }) => {
 
                 if (deleteResult) {
                   var temp = [];
+                  console.log(typeof currentIndex, currentIndex);
                   for (let i = 0; i < renderImage.length; i++) {
                     if (i != currentIndex) {
                       temp.push(renderImage[i]);
+                    } else {
+                      console.log(`deleting ${i}`);
                     }
                   }
                   setRenderImage(temp);
+                  flatlistRef.current.scrollToIndex({ index: currentIndex });
                   setThumbImage(temp);
                   deleteUsingMD5Async(md5);
                   if (cloudId) {
@@ -228,6 +233,7 @@ const SingleView = ({ navigation }) => {
     <>
       <SafeAreaView style={styles.container}>
         <FlatList
+          ref={flatlistRef}
           getItemLayout={(renderItem, index) => {
             // console.log("get item layout called", index, renderItem.length);
             return {
