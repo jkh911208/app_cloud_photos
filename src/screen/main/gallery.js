@@ -16,9 +16,15 @@ import uploadPhotoToCloud from "../../compoent/uploadPhotoToCloud";
 const Gallery = ({ navigation }) => {
   const thumbnailWidth = Dimensions.get("window").width / 4;
   const [refreshing, setRefreshing] = useState(false);
-  const [image, setImage] = useState([]);
+  const [image, setNewImage] = useState([]);
   const [token, setToken] = useState(null);
-  var appState = AppState.currentState
+  var appState = AppState.currentState;
+  var trackImage = image;
+
+  const setImage = (data) => {
+    setNewImage(data);
+    trackImage = data;
+  };
 
   useEffect(() => {
     SecureStore.getItemAsync("token").then((result) => {
@@ -52,14 +58,15 @@ const Gallery = ({ navigation }) => {
       console.log("changed from background to active");
       changeListener();
     }
-    appState = nextAppState
+    appState = nextAppState;
   };
 
   const changeListener = async () => {
     if (AppState.currentState == "active") {
       console.log("app state changed to active");
+      console.log("track image type", typeof trackImage)
       const updated = await updateLocalPhotoLibrary(
-        image[image.length - 1].creationTime
+        trackImage[trackImage.length - 1].creationTime
       );
       console.log("local library updated", updated);
       if (updated) {

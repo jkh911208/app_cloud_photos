@@ -27,6 +27,7 @@ const updateLocalPhotoLibrary = async (finishTime = 0) => {
 
       if (asset.assets[i].creationTime < finishTime) {
         exitLoop = true;
+        break;
       }
 
       // check md5
