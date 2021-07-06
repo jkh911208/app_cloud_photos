@@ -37,11 +37,13 @@ const Gallery = ({ navigation }) => {
     var result = await getMedia(Date.now());
     if (result.length == 0) {
       await updateLocalPhotoLibrary(0);
-      result = await getMedia(Date.now());
+    } else {
+      await updateLocalPhotoLibrary(result[result.length - 1].creationTime);
     }
+    await getCloudData();
+    result = await getMedia(Date.now());
     setImage(result);
-    await uploadPhotoToCloud();
-    getCloudData();
+    uploadPhotoToCloud();
   };
 
   useEffect(() => {
@@ -64,7 +66,7 @@ const Gallery = ({ navigation }) => {
   const changeListener = async () => {
     if (AppState.currentState == "active") {
       console.log("app state changed to active");
-      console.log("track image type", typeof trackImage)
+      console.log("track image type", typeof trackImage);
       const updated = await updateLocalPhotoLibrary(
         trackImage[trackImage.length - 1].creationTime
       );
