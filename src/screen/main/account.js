@@ -20,9 +20,9 @@ const Account = ({ navigation }) => {
 
   const toggleWifiOnly = () => {
     const newValue = !wifiOnly;
-    console.log(newValue);
+    console.log("new wifi only value", newValue);
     SecureStore.setItemAsync("wifiOnly", newValue.toString()).then((result) => {
-      setWifiOnly((previousState) => !previousState);
+      setWifiOnly(newValue);
     });
   };
 
