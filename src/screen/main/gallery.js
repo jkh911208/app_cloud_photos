@@ -38,7 +38,12 @@ const Gallery = ({ navigation }) => {
     if (result.length == 0) {
       await updateLocalPhotoLibrary(0);
     } else {
-      await updateLocalPhotoLibrary(result[result.length - 1].creationTime);
+      setImage(result);
+      const localUpdated = await updateLocalPhotoLibrary(result[result.length - 1].creationTime);
+      if (localUpdated) {
+        result = await getMedia(Date.now());
+        setImage(result);
+      }
     }
     await getCloudData();
     result = await getMedia(Date.now());

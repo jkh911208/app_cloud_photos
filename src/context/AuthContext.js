@@ -156,7 +156,7 @@ const signup =
       console.log("dispatch type token finished");
       // navigate to main flow
 
-      navigate("Gallery");
+      navigate("configScreen");
     } catch (err) {
       console.log("sign up failed");
       dispatch({ type: "error", payload: "Sign up failed, Please try later" });
@@ -193,7 +193,7 @@ const signin =
       dispatch({ type: "token", payload: response.data.access_token });
       console.log("dispatch type token finished");
       // navigate to main flow
-      navigate("Gallery");
+      navigate("configScreen");
     } catch (err) {
       console.log("sign in failed");
       dispatch({ type: "error", payload: "Sign in failed" });

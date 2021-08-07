@@ -11,12 +11,18 @@ import JWT from "expo-jwt";
 
 const uploadPhotoToCloud = async () => {
   const networkType = await Network.getNetworkStateAsync();
-  if (networkType.type != Network.NetworkStateType.WIFI) {
-    console.log("connect to wifi to upload");
-    return null;
-  } else {
-    console.log("upload photo to cloud");
+  let currentWifiOnly = await SecureStore.getItemAsync("wifiOnly");
+  currentWifiOnly = currentWifiOnly == "false" ? false : true;
+  console.log("current wifi only value", currentWifiOnly);
+  if (currentWifiOnly) {
+    if (networkType.type != Network.NetworkStateType.WIFI) {
+      console.log("connect to wifi to upload");
+      return null;
+    } else {
+      console.log("upload photo to cloud");
+    }
   }
+
   const token = await SecureStore.getItemAsync("token");
 
   if (token) {

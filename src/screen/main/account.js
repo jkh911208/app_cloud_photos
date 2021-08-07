@@ -1,14 +1,30 @@
 import * as SecureStore from "expo-secure-store";
 
-import { Header, ListItem } from "react-native-elements";
-import React, { useContext } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import { Header, ListItem, Switch, Text } from "react-native-elements";
+import React, { useContext, useEffect, useState } from "react";
 
 import { Context as AuthContext } from "../../context/AuthContext";
-import { FlatList } from "react-native";
 import { SafeAreaView } from "react-navigation";
 
 const Account = ({ navigation }) => {
   const { signout } = useContext(AuthContext);
+  const [wifiOnly, setWifiOnly] = useState();
+
+  useEffect(() => {
+    SecureStore.getItemAsync("wifiOnly").then((result) => {
+      const currentWifiOnly = result == "false" ? false : true;
+      setWifiOnly(currentWifiOnly);
+    });
+  }, []);
+
+  const toggleWifiOnly = () => {
+    const newValue = !wifiOnly;
+    console.log(newValue);
+    SecureStore.setItemAsync("wifiOnly", newValue.toString()).then((result) => {
+      setWifiOnly((previousState) => !previousState);
+    });
+  };
 
   const account_list = [
     {
@@ -59,6 +75,17 @@ const Account = ({ navigation }) => {
           backgroundColor: "#939597",
         }}
       />
+      <View style={styles.switch_view}>
+        <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={wifiOnly ? "#f5dd4b" : "#f4f3f4"}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleWifiOnly}
+          value={wifiOnly}
+          style={{ marginRight: 15 }}
+        />
+        <Text>{`Upload Photos on Wifi Only`}</Text>
+      </View>
       <FlatList
         data={account_list}
         renderItem={renderItem}
@@ -67,5 +94,13 @@ const Account = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  switch_view: {
+    flexDirection: "row",
+    marginVertical: 10,
+    marginLeft: 5,
+  },
+});
 
 export default Account;

@@ -1,4 +1,8 @@
-import { createCreationTimeIndex, createMD5Index, createMediaTable } from "../../database";
+import {
+  createCreationTimeIndex,
+  createMD5Index,
+  createMediaTable,
+} from "../../database";
 import { useContext, useEffect } from "react";
 
 import { Context as AuthContext } from "../../context/AuthContext";
