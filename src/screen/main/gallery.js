@@ -146,7 +146,11 @@ const Gallery = ({ navigation }) => {
               "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
             },
           }}
-          style={{ width: thumbnailWidth, height: thumbnailWidth, margin: 1 }}
+          style={{
+            width: thumbnailWidth - 2,
+            height: thumbnailWidth - 2,
+            margin: 1,
+          }}
           onPress={() => {
             console.log("index", index);
             navigation.navigate("SingleView", {
@@ -192,8 +196,8 @@ const Gallery = ({ navigation }) => {
           color={iconColor}
           containerStyle={{
             position: "absolute",
-            top: 8,
-            right: 8,
+            top: 5,
+            right: 5,
             borderColor: "black",
             borderRadius: 15,
             borderWidth: 1,
