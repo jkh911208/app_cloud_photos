@@ -1,7 +1,7 @@
 import * as SecureStore from "expo-secure-store";
 
 import { AppState, Dimensions, FlatList, View } from "react-native";
-import { Header, Image, Text } from "react-native-elements";
+import { Header, Icon, Image, Text } from "react-native-elements";
 import React, { useEffect, useState } from "react";
 import { deleteUsingMD5Async, getMedia } from "../../database";
 
@@ -39,7 +39,9 @@ const Gallery = ({ navigation }) => {
       await updateLocalPhotoLibrary(0);
     } else {
       setImage(result);
-      const localUpdated = await updateLocalPhotoLibrary(result[result.length - 1].creationTime);
+      const localUpdated = await updateLocalPhotoLibrary(
+        result[result.length - 1].creationTime
+      );
       if (localUpdated) {
         result = await getMedia(Date.now());
         setImage(result);
@@ -96,34 +98,109 @@ const Gallery = ({ navigation }) => {
   };
 
   const renderItem = ({ item, index }) => {
+    var cloudStatus;
+    var iconColor;
+    if (item.local_id == null) {
+      // loaded from cloud, not on device
+      cloudStatus = "download-cloud";
+      iconColor = "green";
+    } else if (item.local_id != null && item.cloud_id != null) {
+      // on device and on cloud
+      cloudStatus = "cloud";
+      iconColor = "green";
+    } else if (item.local_id != null && item.cloud_id == null) {
+      if (Date.now() - 604800000 > item.creationTime) {
+        // not backed up but older than 7 days
+        cloudStatus = "cloud-off";
+        iconColor = "red";
+      } else {
+        // not backed up waiting for backup
+        cloudStatus = "upload-cloud";
+        iconColor = "orange";
+      }
+    }
+
+    var isVideo;
+    if (item.duration > 0) {
+      isVideo = true;
+      var min = Math.floor(item.duration / 60);
+      var sec = Math.floor(item.duration % 60);
+      if (min < 10) {
+        min = "0" + min.toString();
+      }
+      if (sec < 10) {
+        sec = "0" + sec.toString();
+      }
+      cloudStatus = "cloud-off";
+      iconColor = "red";
+    }
+
     return (
-      <Image
-        source={{
-          uri: item.thumbnail_uri,
-          cache: "force-cache",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
-          },
-        }}
-        style={{ width: thumbnailWidth, height: thumbnailWidth, margin: 1 }}
-        onPress={() => {
-          console.log("index", index);
-          navigation.navigate("SingleView", {
-            image,
-            token,
-            initIndex: index,
-            setThumbImage: setImage,
-          });
-        }}
-        onError={async () => {
-          if (token) {
-            console.log("not able to load image in gallery view");
-            await deleteUsingMD5Async(item.md5);
-            setImage(await getMedia(Date.now(), image.length));
-          }
-        }}
-      />
+      <View>
+        <Image
+          source={{
+            uri: item.thumbnail_uri,
+            cache: "force-cache",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
+            },
+          }}
+          style={{ width: thumbnailWidth, height: thumbnailWidth, margin: 1 }}
+          onPress={() => {
+            console.log("index", index);
+            navigation.navigate("SingleView", {
+              image,
+              token,
+              initIndex: index,
+              setThumbImage: setImage,
+            });
+          }}
+          onError={async () => {
+            if (token) {
+              console.log("not able to load image in gallery view");
+              await deleteUsingMD5Async(item.md5);
+              setImage(await getMedia(Date.now(), image.length));
+            }
+          }}
+        />
+        {isVideo ? (
+          <View
+            style={{
+              flexDirection: "row",
+              position: "absolute",
+              bottom: 8,
+              left: 5,
+              borderColor: "black",
+              borderRadius: 15,
+              borderWidth: 1,
+              backgroundColor: "white",
+              alignContent: "center",
+              alignContent: "center",
+            }}
+          >
+            <Icon name="play" size={14} type="feather" color="black" />
+            <Text>
+              {min}:{sec}
+            </Text>
+          </View>
+        ) : null}
+        <Icon
+          name={cloudStatus}
+          size={14}
+          type="feather"
+          color={iconColor}
+          containerStyle={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            borderColor: "black",
+            borderRadius: 15,
+            borderWidth: 1,
+            backgroundColor: "white",
+          }}
+        />
+      </View>
     );
   };
 
