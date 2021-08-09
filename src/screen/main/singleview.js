@@ -7,6 +7,7 @@ import React, { useRef, useState } from "react";
 import { deleteUsingMD5Async, getMedia } from "../../database";
 
 import GestureRecognizer from "react-native-swipe-gestures";
+import ImageZoom from "react-native-image-pan-zoom";
 import JWT from "expo-jwt";
 import { SECRET } from "@env";
 import { SafeAreaView } from "react-navigation";
@@ -186,28 +187,38 @@ const SingleView = ({ navigation }) => {
         onSwipeUp={() => onSwipeUp()}
       >
         <View style={styles.container}>
-          <Image
-            source={{
-              uri: item.uri,
-              cache: "force-cache",
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
-              },
-            }}
-            style={{
-              width: imageDisplayWidth,
-              height: imageHeight,
-            }}
-            resizeMethod="auto"
-            onError={async () => {
-              console.log("not able to load single view photo");
-              await deleteUsingMD5Async(item.md5);
-              const media = await getMedia(Date.now(), renderImage.length);
-              setRenderImage(media);
-              setThumbImage(media);
-            }}
-          />
+          <ImageZoom
+            cropWidth={Dimensions.get("window").width}
+            cropHeight={Dimensions.get("window").height}
+            imageWidth={imageDisplayWidth}
+            imageHeight={imageHeight}
+          >
+            <Image
+              source={{
+                uri: item.uri,
+                cache: "force-cache",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "X-Custom-Auth": JWT.encode(
+                    { timestamp: Date.now() },
+                    SECRET
+                  ),
+                },
+              }}
+              style={{
+                width: imageDisplayWidth,
+                height: imageHeight,
+              }}
+              resizeMethod="auto"
+              onError={async () => {
+                console.log("not able to load single view photo");
+                await deleteUsingMD5Async(item.md5);
+                const media = await getMedia(Date.now(), renderImage.length);
+                setRenderImage(media);
+                setThumbImage(media);
+              }}
+            />
+          </ImageZoom>
         </View>
       </GestureRecognizer>
     );
