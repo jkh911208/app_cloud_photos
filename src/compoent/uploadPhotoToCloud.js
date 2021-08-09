@@ -42,6 +42,7 @@ const uploadPhotoToCloud = async () => {
     "X-Custom-Auth": JWT.encode({ timestamp: Date.now() }, SECRET),
   };
 
+  var newUploaded = false
   // upload file to cloud
   for (let i = 0; i < needUpload.length; i++) {
     const image_data = await MediaLibrary.getAssetInfoAsync(
@@ -82,11 +83,13 @@ const uploadPhotoToCloud = async () => {
     if (response.status == 201) {
       var obj = JSON.parse(response.body);
       // console.log(obj)
+      newUploaded = true
       if (obj) {
         await updateCloudIDAsync(fsInfo.md5, obj.id);
       }
     }
   }
+  return newUploaded
 };
 
 const getNeedUpload = async () => {
