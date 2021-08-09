@@ -22,6 +22,7 @@ const updateLocalPhotoLibrary = async (finishTime = 0) => {
       let fsInfo = await FileSystem.getInfoAsync(asset.assets[i].uri, {
         md5: true,
       });
+      // console.log("file information")
       // console.log(fsInfo);
       // console.log("updatel local photo library", asset.assets[i])
 

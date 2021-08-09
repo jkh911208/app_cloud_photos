@@ -50,7 +50,10 @@ const Gallery = ({ navigation }) => {
     await getCloudData();
     result = await getMedia(Date.now());
     setImage(result);
-    uploadPhotoToCloud();
+    if (await uploadPhotoToCloud()) {
+      result = await getMedia(Date.now(), image.length);
+      setImage(result);
+    }
   };
 
   useEffect(() => {
@@ -91,7 +94,10 @@ const Gallery = ({ navigation }) => {
         image.length > 0 ? image.length : 100
       );
       setImage(result);
-      await uploadPhotoToCloud();
+      if (await uploadPhotoToCloud()) {
+        result = await getMedia(Date.now(), image.length);
+        setImage(result);
+      }
     } else {
       console.log("app state", AppState.currentState);
     }
