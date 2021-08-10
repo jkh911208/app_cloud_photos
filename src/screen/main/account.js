@@ -5,6 +5,7 @@ import { Header, ListItem, Switch, Text } from "react-native-elements";
 import React, { useContext, useEffect, useState } from "react";
 
 import { Context as AuthContext } from "../../context/AuthContext";
+import Constants from "expo-constants";
 import { SafeAreaView } from "react-navigation";
 
 const Account = ({ navigation }) => {
@@ -76,30 +77,47 @@ const Account = ({ navigation }) => {
         }}
       />
       <View style={styles.switch_view}>
-        <Switch
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={wifiOnly ? "#f5dd4b" : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleWifiOnly}
-          value={wifiOnly}
-          style={{ marginRight: 15 }}
-        />
-        <Text>{`Upload Photos on Wifi Only`}</Text>
+        <View style={styles.single_switch_view}>
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={wifiOnly ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleWifiOnly}
+            value={wifiOnly}
+            style={{ marginRight: 15 }}
+          />
+          <View style={styles.single_switch_text_view}>
+            <Text>{`Upload Photos on Wifi Only`}</Text>
+          </View>
+        </View>
       </View>
       <FlatList
         data={account_list}
         renderItem={renderItem}
         keyExtractor={(item) => item.title}
       />
+      <Text>{`v${Constants.manifest.version}`}</Text>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   switch_view: {
+    backgroundColor: "white",
+  },
+  single_switch_view: {
     flexDirection: "row",
-    marginVertical: 10,
+    marginTop: 10,
     marginLeft: 5,
+    paddingBottom:10,
+    borderBottomColor: "#939597",
+    borderBottomWidth: 0.5,
+
+  },
+  single_switch_text_view: {
+    flex: 1,
+    alignContent: "space-between",
+    justifyContent: "space-evenly",
   },
 });
 
