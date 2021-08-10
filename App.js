@@ -14,7 +14,7 @@ import React from "react";
 import SignIn from "./src/screen/login/signIn";
 import SignUp from "./src/screen/login/signUp";
 import SingleView from "./src/screen/main/singleview";
-import configScreen  from "./src/screen/login/config";
+import configScreen from "./src/screen/login/config";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createStackNavigator } from "react-navigation-stack";
 import { setNavigator } from "./src/navigationRef";
@@ -61,7 +61,6 @@ const mediaStackNavigator = createStackNavigator(
           }
         });
       }
-
       return {
         tabBarVisible,
       };
