@@ -90,6 +90,7 @@ const Account = ({ navigation }) => {
             <Text>{`Upload Photos on Wifi Only`}</Text>
           </View>
         </View>
+        <View style={styles.border_view}></View>
       </View>
       <FlatList
         data={account_list}
@@ -109,10 +110,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 10,
     marginLeft: 5,
-    paddingBottom:10,
+    paddingBottom: 10,
+  },
+  border_view: {
     borderBottomColor: "#939597",
     borderBottomWidth: 0.5,
-
   },
   single_switch_text_view: {
     flex: 1,
